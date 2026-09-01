@@ -307,7 +307,8 @@ def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[
 def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence[Example],
                       protected_test: Sequence[Example], candidates: Sequence[str], replay: ReplayStore,
                       budget: BudgetCounter, cfg: LMExperimentConfig, use_latent: bool = True,
-                      rollback_on_retention: bool = True, consolidation_steps: int | None = None) -> tuple[bool, dict[str, float]]:
+                      rollback_on_retention: bool = True, consolidation_steps: int | None = None,
+                      consolidation_examples: Sequence[Example] | None = None) -> tuple[bool, dict[str, float]]:
     """Attempt slow consolidation behind an explicit candidate/commit boundary.
 
     ``use_latent`` supports the preregistered latent-state ablation.
@@ -331,7 +332,8 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
     retention_before = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
                                                 use_fast=True, use_slow=True, use_latent=use_latent) if protected_test else 1.0
     snapshot = model.snapshot_plastic_state()
-    consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=consolidation_steps)
+    evidence_examples = replay.items if consolidation_examples is None else consolidation_examples
+    consolidate_slow(model, tokenizer, evidence_examples, budget, cfg, steps=consolidation_steps)
     current_after = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
                                              use_fast=False, use_slow=True, use_latent=use_latent)
     retention_after = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
