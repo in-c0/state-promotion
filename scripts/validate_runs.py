@@ -42,14 +42,35 @@ def main() -> None:
     if any(r.get("invalidation_reasons") for r in comparable):
         reasons.append("run_level_invalidation_present")
 
-    vals = [float(r["model"]["plastic_parameter_capacity"]) for r in comparable]
-    if rel_spread(vals) > args.tolerance:
-        reasons.append("parameter_capacity_mismatch:plastic_parameter_capacity")
-
-    for key in ["examples_seen", "optimizer_steps", "parameter_write_units"]:
-        vals = [float(r["budget"][key]) for r in comparable]
+    for key in ["plastic_parameter_capacity"]:
+        vals = [float(r["model"][key]) for r in comparable]
         if rel_spread(vals) > args.tolerance:
-            reasons.append(f"budget_mismatch:{key}")
+            reasons.append(f"parameter_capacity_mismatch:{key}")
+
+    vals = [float(r["budget"]["examples_seen"]) for r in comparable]
+    if rel_spread(vals) > args.tolerance:
+        reasons.append("budget_mismatch:examples_seen")
+
+    # Pre-result Amendment A: compare a common hard write ceiling rather than
+    # forcing identical optimizer-step counts across differently sized write scopes.
+    caps = [float(r["budget"]["write_budget_units"]) for r in comparable]
+    if rel_spread(caps) > args.tolerance:
+        reasons.append("budget_mismatch:write_budget_units")
+    for r in comparable:
+        if float(r["budget"]["parameter_write_units"]) > float(r["budget"]["write_budget_units"]) * (1 + args.tolerance):
+            reasons.append(f"write_budget_exceeded:{r['method']}")
+
+    replay_run = next((r for r in comparable if r["method"] == "replay"), None)
+    fixed_run = next((r for r in comparable if r["method"] == "fixed"), None)
+    promotion_run = next((r for r in comparable if r["method"] == "promotion"), None)
+    if replay_run and fixed_run:
+        compute_vals = [float(replay_run["budget"]["tokens_processed"]), float(fixed_run["budget"]["tokens_processed"])]
+        if rel_spread(compute_vals) > 0.10:
+            reasons.append("adaptation_token_envelope_mismatch:replay_vs_fixed")
+    if promotion_run and replay_run and fixed_run:
+        envelope = max(float(replay_run["budget"]["tokens_processed"]), float(fixed_run["budget"]["tokens_processed"]))
+        if float(promotion_run["budget"]["tokens_processed"]) > envelope * 1.10:
+            reasons.append("promotion_exceeds_adaptation_token_envelope")
 
     replay_methods = [r for r in comparable if r["method"] in {"replay", "fixed", "promotion"}]
     if len({r["budget"].get("replay_capacity_examples") for r in replay_methods}) > 1:
