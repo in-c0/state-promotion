@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "state-promotion"
+version = "0.1.0"
+description = "Experiments in evidence-gated multi-timescale continual adaptation"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.4,<3",
+  "numpy>=1.26,<3",
+]
+
+[project.optional-dependencies]
+lm = [
+  "transformers>=4.48,<6",
+  "peft>=0.20,<1",
+  "accelerate>=1.0,<3",
+  "datasets>=3,<6",
+  "safetensors>=0.4,<1",
+]
+dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
