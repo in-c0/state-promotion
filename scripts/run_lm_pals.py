@@ -40,6 +40,8 @@ METHODS = [
     "promotion-no-latent",
     "promotion-reset-latent",
     "promotion-no-rollback",
+    "promotion-no-replay",
+    "promotion-no-slow",
 ]
 
 
@@ -138,8 +140,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
     # B2 spends replay compute in the online update batch. The two-timescale
     # arms reserve replay for slow consolidation so their adaptation-token envelope
     # can be matched against B2 while preserving fast/slow separation.
-    use_online_replay = method == "replay"
-    use_latent = method in {"promotion", "promotion-reset-latent", "promotion-no-rollback"}
+    use_online_replay = method in {"replay", "promotion-no-slow"}
+    use_latent = method in {"promotion", "promotion-reset-latent", "promotion-no-rollback",
+                            "promotion-no-replay", "promotion-no-slow"}
     if method == "promotion-no-latent":
         use_latent = False
 
@@ -168,7 +171,8 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                     update_latent=use_latent, replay_examples=replay_used,
                 )
                 budget.examples_seen += 1
-                replay.add(ex)
+                if method != "promotion-no-replay":
+                    replay.add(ex)
         else:
             for ex in train:
                 budget.examples_seen += 1
@@ -186,7 +190,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 promotion_log.append({"segment": seg, "accepted": True, "gate": 2.0})
             else:
                 promotion_log.append({"segment": seg, "accepted": False, "gate": 0.0})
-        elif method.startswith("promotion"):
+        elif method.startswith("promotion") and method != "promotion-no-slow":
             protected = []
             if stream == "retention":
                 for old in range(seg):
@@ -204,6 +208,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 use_latent=use_latent,
                 rollback_on_retention=method != "promotion-no-rollback",
                 consolidation_steps=len(train),
+                consolidation_examples=train if method == "promotion-no-replay" else None,
             )
             promotion_log.append({"segment": seg, "accepted": accepted, **evidence})
 
@@ -265,6 +270,8 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "write_step_budget": effective_write_step_budget,
             "write_budget_units": budget.write_budget_units,
             "token_parameter_compute_proxy": budget.tokens_processed * base_params,
+            "estimated_training_flops_frozen_backbone": 4 * budget.tokens_processed * base_params,
+            "flop_estimate_note": "Coarse 4*N*tokens estimate for forward plus input-gradient backprop through a frozen transformer; report as an order-of-magnitude proxy, not hardware FLOPs.",
             "wall_seconds": elapsed,
         },
         "matrix": matrix,
