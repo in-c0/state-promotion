@@ -14,8 +14,8 @@ Frozen base model (initial target: `Qwen/Qwen2.5-0.5B-Instruct`) plus:
 2. **Fast adapter** `F_t`: online plastic parameters trained on recent evidence.
 3. **Slow adapter bank** `S`: durable parameterized knowledge.
 4. **Episodic replay** `E`: bounded reservoir storing attributable training examples/outcomes.
-5. **Promotion gate**: decides whether candidate fast-state learning is committed to slow parameters.
-6. **Retention gate + rollback**: consolidation is rejected if protected behavior regresses beyond the preregistered tolerance.
+5. **Promotion gate**: decides whether candidate fast-state learning is committed to slow parameters using only already-observed attributable training/replay evidence.
+6. **Retention gate + rollback**: consolidation is rejected if protected replay-derived probes regress beyond the preregistered tolerance. Held-out evaluation examples are never available to this decision.
 
 The frozen foundation weights are never modified in EXP-001.
 
@@ -81,6 +81,66 @@ For EXP-001, the primary resource normalization is therefore:
 
 This amendment changes only resource normalization; H1's stability/plasticity success criterion and the benchmark invalidation rules remain unchanged.
 
+### Pre-result amendment B — no held-out evidence in promotion decisions (2026-09-01)
+
+This amendment was made **before any EXP-001 language-model score was inspected**. An engineering audit found that an earlier scaffold passed held-out `test` examples into the promotion/retention gate. That would give B5 privileged access to evaluation labels and invalidate the comparison even if those examples were not used for gradient updates.
+
+For every EXP-001 run after this amendment:
+
+1. Held-out evaluation examples are used only for post-update scoring and never for routing, promotion, rollback, optimizer selection, or replay construction.
+2. The current-task promotion probe is formed from already-observed training examples in the current segment, deduplicated by active context/key/target mapping.
+3. The protected retention probe is formed only from the bounded replay reservoir. On revision streams, replay entries made obsolete by an observed superseding training event are excluded from protection.
+4. Every promotion run records probe counts and hashes plus a machine-checkable `heldout_gate_example_count`, which must be zero.
+5. No-grad forward passes used by the promotion gate are counted separately as **decision-time inference compute**. They are not hidden inside post-hoc evaluation cost.
+
+This amendment fixes an information-leak confound in the scaffold. It does not alter H1, the parameter-write normalization, or the held-out evaluation metrics.
+
+### Pre-result amendment C — continuous optimizer state (2026-09-01)
+
+This amendment was made **before any EXP-001 language-model score was inspected**. An implementation audit found that the scaffold recreated AdamW at every stream-segment boundary. That makes a nominally continuous B1/B2 adapter weaker than intended because its first- and second-moment state is repeatedly discarded for orchestration reasons rather than for a mechanism defined by the condition.
+
+For every EXP-001 run after this amendment:
+
+1. B1/B2 preserve optimizer state across stream-segment boundaries for the continuously updated single adapter.
+2. Fast-state conditions preserve the fast optimizer while the same fast parameter state remains active.
+3. Whenever the fast parameter state is explicitly reset after accepted consolidation, its optimizer state is reset at the same boundary.
+4. A rejected/declined promotion does not reset the fast optimizer, because the fast parameter state itself remains the active online state.
+5. Model initialization is seeded per paired lifetime/condition so all methods in a paired seed begin from identical prompt-state initialization, while different confirmatory seeds remain independent.
+
+This amendment strengthens fidelity to the preregistered baselines and removes a segment-boundary artifact. It does not alter H1 or any evaluation target.
+
+### Pre-result amendment D — architecture-matched latent state for routing controls (2026-09-01)
+
+This amendment was made **before any EXP-001 language-model score was inspected**. A static condition audit found that the recovered B3 fixed-routing implementation disabled persistent latent state while B5 enabled it. That would confound the principal B5-vs-B3 routing comparison: a difference could be attributed either to learned promotion or simply to B5 receiving an additional persistent state channel.
+
+For every EXP-001 run after this amendment:
+
+1. B3 fixed routing, B4 random routing, and B5 learned promotion all use the same persistent latent-state mechanism and update rule.
+2. Their fast/slow prompt capacities, latent dimensionality, replay capacity, and initialization pairing are architecture matched.
+3. The primary B5-vs-B3/B4 interpretation is therefore about **routing/consolidation policy**, subject to the remaining resource and compute controls.
+4. `promotion-no-latent` remains the explicit H2 ablation for measuring the contribution of persistent latent state to the proposed method.
+5. Run manifests record whether latent state is enabled, and the validator rejects a fixed/random/promotion comparison with a latent-state mismatch.
+
+This amendment removes an architectural confound; it does not change H1's success criterion.
+
+## Pre-confirmatory calibration boundary
+
+EXP-001 must not move from PILOT to confirmatory status until a development-only calibration phase is complete and frozen. Development seeds and confirmatory seeds must be disjoint. The calibration phase may be used only to:
+
+- verify that PALS is non-ceiling and produces measurable interference;
+- choose/freeze the fixed-routing cadence from a small predeclared cadence set rather than retaining a knowingly weak fixed baseline;
+- choose/freeze B5 gate thresholds and learning-rate values; and
+- establish a common compute envelope that does not systematically handicap the strongest replay or fixed-routing baseline.
+
+After this boundary is frozen, confirmatory seeds may not be used for threshold/cadence tuning. Any post-lock change creates a new protocol version and the affected runs are not confirmatory evidence for the previous version.
+
+Before the first confirmatory run, also freeze and record:
+
+- immutable model-weight and tokenizer revisions;
+- an exact dependency/environment lock;
+- a code commit SHA (the source-tree SHA-256 is a fallback pilot provenance fingerprint, not a substitute for a confirmatory commit); and
+- the PALS generator revision plus the disjoint confirmatory seed list or a committed seed-selection rule.
+
 ## Data
 
 ### PALS-v0: Persistent Adaptation Learning Stream
@@ -138,7 +198,7 @@ A benchmark configuration is invalid for the primary claim if any of the followi
 
 1. All adaptive arms exceed 95% on the primary score before the third stream segment (ceiling).
 2. A method sees leaked task identity or held-out answers unavailable to others.
-3. Parameter count, write count, optimizer steps, or replay budget violate matching tolerance.
+3. The parameter-capacity, write-ceiling, data/replay-budget, or compute-envelope rules in **Budget matching** are violated.
 4. Evaluation depends on non-deterministic generation without enough repeats to estimate variance.
 5. The promotion arm's apparent advantage disappears when consolidation count is matched by a random/fixed routing control.
 6. Results depend on a single task ordering.
