@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software or experimental protocol, please cite the associated paper when available."
+title: "State Promotion"
+type: software
+version: 0.1.0
+date-released: 2026-09-01
+license: Apache-2.0
+repository-code: "https://github.com/in-c0/state-promotion"
