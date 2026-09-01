@@ -21,7 +21,7 @@ The frozen foundation weights are never modified in EXP-001.
 
 ## Primary hypothesis H1
 
-At an equalized trainable-parameter budget, replay-memory budget, online-token budget, optimizer-step/write budget, and approximately matched compute, **State Promotion** will achieve lower average forgetting than sequential adaptation and fixed-schedule consolidation while retaining at least 95% of the best baseline's new-task plasticity.
+At an equalized trainable-parameter capacity, replay-memory budget, online-token budget, **parameter-write budget ceiling**, and approximately matched adaptation-token compute envelope, **State Promotion** will achieve lower average forgetting than sequential adaptation and fixed-schedule consolidation while retaining at least 95% of the best baseline's new-task plasticity.
 
 Primary success criterion:
 
@@ -53,15 +53,33 @@ B5. **State Promotion**: latent state + evidence-gated consolidation + retention
 Before a run can count as confirmatory:
 
 - same frozen base and tokenizer;
-- same trainable parameter count within ±2%, or report a parameter-efficiency curve;
-- same number of stream examples/tokens;
-- same replay capacity in bytes/examples;
-- optimizer steps within ±2%;
-- parameter-write events explicitly counted;
-- total measured training wall time and estimated FLOPs reported;
+- same total plastic parameter capacity within ±2%, or report a parameter-efficiency curve;
+- same number of unique stream examples/tokens;
+- same replay capacity in bytes/examples for replay-assisted arms;
+- same hard **parameter-write budget ceiling** within ±2%, measured as the number of parameter elements exposed to optimizer writes;
+- optimizer steps are reported but are not required to be identical when methods update different-sized parameter subsets per step;
+- adaptation-token exposure is explicitly counted, and the strong replay baseline versus two-timescale arms must be compared under the same predeclared compute envelope or on a resource/performance curve;
+- total measured training wall time and a documented compute proxy / FLOP estimate are reported;
 - no method receives task IDs unless every method receives them.
 
 A run violating one of these is **invalid for H1** and may only be reported as a pilot.
+
+### Pre-result amendment A — write-budget normalization (2026-09-01)
+
+This amendment was made **before any EXP-001 language-model score was inspected**. The original draft required both optimizer-step counts and parameter-write counts to match within ±2%. That is over-constrained when B1/B2 update a single adapter spanning the full plastic capacity while B3/B5 update only the fast or slow subset on a given step: equal optimizer steps would imply unequal parameter writes, while equal writes would imply unequal optimizer steps.
+
+For EXP-001, the primary resource normalization is therefore:
+
+1. Let one write unit equal the number of elements in the fast-state parameter subset.
+2. Give every adaptive arm the same hard write ceiling, nominally **2T write units** for a stream containing `T` unique online update events.
+3. B1/B2 may update the full single-adapter capacity (2 units) once per online event, consuming the full 2T ceiling.
+4. B3/B5 update the fast subset (1 unit) on each online event, leaving at most T units for slow consolidation.
+5. For the strong replay comparison, B2 uses replay in the online update batch, whereas B3/B5 reserve replay for slow consolidation; adaptation-token exposure is counted so that compute can be matched or plotted as a resource curve.
+6. B5 is allowed to consume **less** than the write ceiling when its evidence gate declines promotion. That lower consumption is part of the mechanism under test, not a reason to add dummy writes.
+7. B4 random routing is matched post-hoc to B5's accepted commit count and per-commit consolidation allocation, as preregistered.
+8. Any method exceeding the write ceiling is invalid. Actual writes, optimizer steps, replay examples, processed adaptation tokens, and wall time are all reported.
+
+This amendment changes only resource normalization; H1's stability/plasticity success criterion and the benchmark invalidation rules remain unchanged.
 
 ## Data
 
