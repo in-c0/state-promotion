@@ -271,12 +271,18 @@ def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[
 
 def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence[Example],
                       protected_test: Sequence[Example], candidates: Sequence[str], replay: ReplayStore,
-                      budget: BudgetCounter, cfg: LMExperimentConfig) -> tuple[bool, dict[str, float]]:
-    """Attempt slow consolidation; commit only if acquisition and retention gates pass."""
+                      budget: BudgetCounter, cfg: LMExperimentConfig, use_latent: bool = True,
+                      rollback_on_retention: bool = True) -> tuple[bool, dict[str, float]]:
+    """Attempt slow consolidation behind an explicit candidate/commit boundary.
+
+    ``use_latent`` supports the preregistered latent-state ablation.
+    ``rollback_on_retention=False`` is the evidence-gate-without-retention-rollback
+    ablation; it should never be used for the primary method.
+    """
     current_with_fast = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                                 use_fast=True, use_slow=True, use_latent=True)
+                                                 use_fast=True, use_slow=True, use_latent=use_latent)
     current_slow_only = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                                 use_fast=False, use_slow=True, use_latent=True)
+                                                 use_fast=False, use_slow=True, use_latent=use_latent)
     fast_gain = current_with_fast - current_slow_only
     evidence = {
         "current_with_fast": current_with_fast,
@@ -288,13 +294,13 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
         return False, evidence
 
     retention_before = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
-                                                use_fast=True, use_slow=True, use_latent=True) if protected_test else 1.0
+                                                use_fast=True, use_slow=True, use_latent=use_latent) if protected_test else 1.0
     snapshot = model.snapshot_plastic_state()
     consolidate_slow(model, tokenizer, replay.items, budget, cfg)
     current_after = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                             use_fast=False, use_slow=True, use_latent=True)
+                                             use_fast=False, use_slow=True, use_latent=use_latent)
     retention_after = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
-                                               use_fast=False, use_slow=True, use_latent=True) if protected_test else 1.0
+                                               use_fast=False, use_slow=True, use_latent=use_latent) if protected_test else 1.0
     retention_drop = retention_before - retention_after
     evidence.update({
         "retention_before": retention_before,
@@ -303,7 +309,7 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
         "current_after": current_after,
     })
 
-    if retention_drop > cfg.promotion_max_retention_drop or current_after < cfg.promotion_min_current_acc:
+    if rollback_on_retention and (retention_drop > cfg.promotion_max_retention_drop or current_after < cfg.promotion_min_current_acc):
         model.restore_plastic_state(snapshot)
         evidence["gate"] = -1.0
         return False, evidence
