@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict
 from dataclasses import asdict, replace
+import hashlib
 import json
 from pathlib import Path
 import random
@@ -54,13 +55,91 @@ def group(examples):
 
 def git_sha() -> str:
     try:
-        return subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()
+        return subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+            text=True, stderr=subprocess.DEVNULL,
+        ).strip()
     except Exception:
         return "unknown"
 
 
+def source_tree_sha256() -> str:
+    """Stable fallback provenance hash for source archives without .git metadata."""
+    h = hashlib.sha256()
+    roots = [ROOT / "src", ROOT / "scripts", ROOT / "tests", ROOT / "experiments", ROOT / "docs"]
+    files = [ROOT / "README.md", ROOT / "pyproject.toml", ROOT / "Makefile"]
+    for root in roots:
+        if root.exists():
+            files.extend(x for x in root.rglob("*") if x.is_file())
+    for path in sorted(set(files), key=lambda x: x.relative_to(ROOT).as_posix()):
+        rel = path.relative_to(ROOT).as_posix()
+        if "__pycache__" in path.parts or path.suffix in {".pyc", ".pyo"}:
+            continue
+        h.update(rel.encode("utf-8")); h.update(b"\0")
+        h.update(path.read_bytes()); h.update(b"\0")
+    return h.hexdigest()
+
+
 def replay_bytes(items: list[Example]) -> int:
     return sum(len(ex.prompt.encode("utf-8")) + len(ex.target.encode("utf-8")) for ex in items)
+
+
+def dedupe_probe_examples(items: list[Example]) -> list[Example]:
+    """Keep one attributable observation per active context/key/target mapping."""
+    seen: set[tuple[str, str, str]] = set()
+    out: list[Example] = []
+    for ex in items:
+        key = (ex.context, ex.key, ex.target)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(ex)
+    return out
+
+
+def active_train_targets(all_examples: list[Example], through_segment: int) -> dict[tuple[str, str], str]:
+    """Latest observed training target for each context/key pair."""
+    latest: dict[tuple[str, str], Example] = {}
+    ordered = sorted(
+        [e for e in all_examples if e.split == "train" and e.segment <= through_segment],
+        key=lambda e: (e.segment, e.version),
+    )
+    for ex in ordered:
+        latest[(ex.context, ex.key)] = ex
+    return {pair: ex.target for pair, ex in latest.items()}
+
+
+def build_promotion_probes(*, stream: str, segment: int, segment_train: list[Example],
+                           replay_items: list[Example], all_examples: list[Example]) -> tuple[list[Example], list[Example]]:
+    """Build promotion evidence only from already-observed training examples.
+
+    Current probes come from the segment just learned. Protected probes come from
+    the bounded replay reservoir and therefore do not expose held-out evaluation
+    labels to the promotion arm. On revision streams, obsolete replay entries are
+    excluded from protection once a superseding training observation is seen.
+    """
+    current = dedupe_probe_examples([e for e in segment_train if e.split == "train"])
+    protected_pool = [e for e in replay_items if e.split == "train" and e.segment < segment]
+    if stream == "revision":
+        active = active_train_targets(all_examples, segment)
+        protected_pool = [
+            e for e in protected_pool
+            if active.get((e.context, e.key)) == e.target
+        ]
+    protected = dedupe_probe_examples(protected_pool)
+    if any(e.split != "train" for e in current + protected):
+        raise AssertionError("promotion probes must never contain held-out evaluation examples")
+    return current, protected
+
+
+def probe_hash(items: list[Example]) -> str:
+    h = hashlib.sha256()
+    for ex in items:
+        h.update(ex.prompt.encode("utf-8"))
+        h.update(b"\0")
+        h.update(ex.target.encode("utf-8"))
+        h.update(b"\n")
+    return h.hexdigest()
 
 
 def predict(model, tokenizer, ex: Example, candidates: list[str], *, use_fast: bool, use_slow: bool,
@@ -124,7 +203,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         raise ValueError(stream)
 
     segments = group(examples)
-    model, tokenizer = load_model(cfg)
+    model_init_seed = seed + 1701
+    torch.manual_seed(model_init_seed)
+    model, tokenizer = load_model(cfg, seed=model_init_seed)
     replay = ReplayStore(cfg.replay_capacity, seed + 42)
     budget = BudgetCounter()
     total_train_events = sum(len(v["train"]) for v in segments.values())
@@ -134,15 +215,21 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
     rng = random.Random(seed)
     matrix = []
     promotion_log = []
+    promotion_probe_audit = []
     revision_trajectory = []
     started = time.perf_counter()
+    online_opt = None
+    online_scope = None
 
     # B2 spends replay compute in the online update batch. The two-timescale
     # arms reserve replay for slow consolidation so their adaptation-token envelope
     # can be matched against B2 while preserving fast/slow separation.
     use_online_replay = method in {"replay", "promotion-no-slow"}
-    use_latent = method in {"promotion", "promotion-reset-latent", "promotion-no-rollback",
-                            "promotion-no-replay", "promotion-no-slow"}
+    # Architecture-match the two-timescale routing controls: fixed, random,
+    # and learned promotion all receive the same persistent latent state.
+    # Otherwise B5-vs-B3/B4 would confound routing with latent-state access.
+    use_latent = method in {"fixed", "random", "promotion", "promotion-reset-latent",
+                            "promotion-no-rollback", "promotion-no-replay", "promotion-no-slow"}
     if method == "promotion-no-latent":
         use_latent = False
 
@@ -156,7 +243,12 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         if method != "frozen":
             scope = "single" if method in {"sequential", "replay"} else "fast"
             params = model.set_trainable(scope)
-            opt = torch.optim.AdamW(params, lr=cfg.online_lr)
+            # B1/B2 are genuinely continuous baselines: optimizer state persists
+            # across orchestration boundaries. Two-timescale arms keep fast
+            # optimizer state until the fast parameters themselves are reset.
+            if online_opt is None or online_scope != scope:
+                online_opt = torch.optim.AdamW(params, lr=cfg.online_lr)
+                online_scope = scope
 
             for ex in train:
                 batch = [ex]
@@ -166,7 +258,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                     batch += sampled
                     replay_used = len(sampled)
                 supervised_step(
-                    model, tokenizer, batch, opt, budget,
+                    model, tokenizer, batch, online_opt, budget,
                     use_fast=True, use_slow=True, use_latent=use_latent,
                     update_latent=use_latent, replay_examples=replay_used,
                 )
@@ -181,26 +273,39 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         if method == "fixed":
             consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=len(train))
             model.reset_fast()
+            online_opt = None
+            online_scope = None
         elif method == "random":
             if random_commit_segments is None:
                 raise ValueError("random method requires --random-commit-segments")
             if seg in random_commit_segments:
                 consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=len(train))
                 model.reset_fast()
+                online_opt = None
+                online_scope = None
                 promotion_log.append({"segment": seg, "accepted": True, "gate": 2.0})
             else:
                 promotion_log.append({"segment": seg, "accepted": False, "gate": 0.0})
         elif method.startswith("promotion") and method != "promotion-no-slow":
-            protected = []
-            if stream == "retention":
-                for old in range(seg):
-                    protected.extend(segments[old]["test"])
-            else:
-                protected, _ = active_revision_tests(examples, seg - 1)
+            current_probe, protected_probe = build_promotion_probes(
+                stream=stream,
+                segment=seg,
+                segment_train=train,
+                replay_items=replay.items,
+                all_examples=examples,
+            )
+            promotion_probe_audit.append({
+                "segment": seg,
+                "current_probe_examples": len(current_probe),
+                "protected_probe_examples": len(protected_probe),
+                "current_probe_sha256": probe_hash(current_probe),
+                "protected_probe_sha256": probe_hash(protected_probe),
+                "heldout_gate_example_count": sum(ex.split != "train" for ex in current_probe + protected_probe),
+            })
             accepted, evidence = guarded_promotion(
                 model, tokenizer,
-                current_test=segments[seg]["test"],
-                protected_test=protected,
+                current_probe=current_probe,
+                protected_probe=protected_probe,
                 candidates=candidates,
                 replay=replay,
                 budget=budget,
@@ -211,6 +316,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 consolidation_examples=train if method == "promotion-no-replay" else None,
             )
             promotion_log.append({"segment": seg, "accepted": accepted, **evidence})
+            if accepted:
+                online_opt = None
+                online_scope = None
 
         if stream == "retention":
             row = [float("nan")] * len(segments)
@@ -250,6 +358,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         "stream": stream,
         "seed": seed,
         "git_sha": git_sha(),
+        "source_tree_sha256": source_tree_sha256(),
         "config": asdict(cfg),
         "model": {
             "name": cfg.model_name,
@@ -259,6 +368,8 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "backbone_frozen": frozen_backbone,
             "model_revision": getattr(model.base.config, "_commit_hash", None),
             "tokenizer_revision": getattr(tokenizer, "init_kwargs", {}).get("_commit_hash"),
+            "model_init_seed": model_init_seed,
+            "latent_state_enabled": use_latent,
             "write_unit_parameters": write_unit_parameters,
         },
         "metrics": metrics,
@@ -271,12 +382,16 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "write_budget_units": budget.write_budget_units,
             "token_parameter_compute_proxy": budget.tokens_processed * base_params,
             "estimated_training_flops_frozen_backbone": 4 * budget.tokens_processed * base_params,
+            "decision_token_parameter_compute_proxy": budget.decision_tokens_processed * base_params,
+            "estimated_decision_flops_frozen_backbone": 2 * budget.decision_tokens_processed * base_params,
             "flop_estimate_note": "Coarse 4*N*tokens estimate for forward plus input-gradient backprop through a frozen transformer; report as an order-of-magnitude proxy, not hardware FLOPs.",
+            "decision_flop_estimate_note": "Coarse 2*N*tokens estimate for no-grad promotion-gate forward passes. These are decision-time inference costs, not post-hoc evaluation costs.",
             "wall_seconds": elapsed,
         },
         "matrix": matrix,
         "revision_trajectory": revision_trajectory,
         "promotion_log": promotion_log,
+        "promotion_probe_audit": promotion_probe_audit,
         "accepted_commit_segments": accepted_segments,
         "random_commit_segments": sorted(random_commit_segments or []),
         "invalidation_reasons": invalid,
