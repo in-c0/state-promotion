@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import json
 from pathlib import Path
 import random
@@ -112,7 +112,8 @@ def revision_metrics(model, tokenizer, all_examples: list[Example], candidates: 
 
 
 def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "retention",
-        eval_cap: int | None = None, random_commit_segments: set[int] | None = None) -> dict:
+        eval_cap: int | None = None, random_commit_segments: set[int] | None = None,
+        write_step_budget: int | None = None) -> dict:
     if stream == "retention":
         examples, candidates = generate_retention_stream(seed)
     elif stream == "revision":
@@ -124,14 +125,20 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
     model, tokenizer = load_model(cfg)
     replay = ReplayStore(cfg.replay_capacity, seed + 42)
     budget = BudgetCounter()
+    total_train_events = sum(len(v["train"]) for v in segments.values())
+    write_unit_parameters = model.fast_prompt.numel()
+    effective_write_step_budget = 2 * total_train_events if write_step_budget is None else write_step_budget
+    budget.write_budget_units = effective_write_step_budget * write_unit_parameters
     rng = random.Random(seed)
     matrix = []
     promotion_log = []
     revision_trajectory = []
     started = time.perf_counter()
 
-    use_replay = method in {"replay", "fixed", "random", "promotion", "promotion-no-latent",
-                            "promotion-reset-latent", "promotion-no-rollback"}
+    # B2 spends replay compute in the online update batch. The two-timescale
+    # arms reserve replay for slow consolidation so their adaptation-token envelope
+    # can be matched against B2 while preserving fast/slow separation.
+    use_online_replay = method == "replay"
     use_latent = method in {"promotion", "promotion-reset-latent", "promotion-no-rollback"}
     if method == "promotion-no-latent":
         use_latent = False
@@ -151,7 +158,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             for ex in train:
                 batch = [ex]
                 replay_used = 0
-                if use_replay:
+                if use_online_replay:
                     sampled = replay.sample(cfg.replay_per_online_step)
                     batch += sampled
                     replay_used = len(sampled)
@@ -168,13 +175,13 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 replay.add(ex)
 
         if method == "fixed":
-            consolidate_slow(model, tokenizer, replay.items, budget, cfg)
+            consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=len(train))
             model.reset_fast()
         elif method == "random":
             if random_commit_segments is None:
                 raise ValueError("random method requires --random-commit-segments")
             if seg in random_commit_segments:
-                consolidate_slow(model, tokenizer, replay.items, budget, cfg)
+                consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=len(train))
                 model.reset_fast()
                 promotion_log.append({"segment": seg, "accepted": True, "gate": 2.0})
             else:
@@ -196,6 +203,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 cfg=cfg,
                 use_latent=use_latent,
                 rollback_on_retention=method != "promotion-no-rollback",
+                consolidation_steps=len(train),
             )
             promotion_log.append({"segment": seg, "accepted": accepted, **evidence})
 
@@ -244,6 +252,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "base_parameters": base_params,
             "plastic_parameter_capacity": plastic_params,
             "backbone_frozen": frozen_backbone,
+            "model_revision": getattr(model.base.config, "_commit_hash", None),
+            "tokenizer_revision": getattr(tokenizer, "init_kwargs", {}).get("_commit_hash"),
+            "write_unit_parameters": write_unit_parameters,
         },
         "metrics": metrics,
         "budget": {
@@ -251,6 +262,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "replay_capacity_examples": cfg.replay_capacity,
             "replay_final_examples": len(replay.items),
             "replay_final_bytes": replay_bytes(replay.items),
+            "write_step_budget": effective_write_step_budget,
+            "write_budget_units": budget.write_budget_units,
+            "token_parameter_compute_proxy": budget.tokens_processed * base_params,
             "wall_seconds": elapsed,
         },
         "matrix": matrix,
@@ -279,6 +293,8 @@ def main() -> None:
     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
     p.add_argument("--eval-cap", type=int, default=None, help="Pilot-only cap on test examples")
     p.add_argument("--random-commit-segments", default=None, help="Comma-separated segments for matched random control")
+    p.add_argument("--write-step-budget", type=int, default=None,
+                   help="Write ceiling in fast-adapter-equivalent steps; default is 2x unique train events")
     p.add_argument("--out", type=Path, default=None)
     args = p.parse_args()
 
@@ -288,6 +304,7 @@ def main() -> None:
         stream=args.stream,
         eval_cap=args.eval_cap,
         random_commit_segments=parse_segments(args.random_commit_segments),
+        write_step_budget=args.write_step_budget,
     )
     out = args.out or ROOT / "results" / f"lm-{args.stream}-{args.method}-{args.seed}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
