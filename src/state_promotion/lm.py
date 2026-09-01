@@ -23,7 +23,7 @@ class LMExperimentConfig:
     replay_capacity: int = 96
     replay_per_online_step: int = 1
     consolidation_steps: int = 24
-    consolidation_batch: int = 8
+    consolidation_batch: int = 1
     promotion_min_fast_gain: float = 0.08
     promotion_min_current_acc: float = 0.45
     promotion_max_retention_drop: float = 0.03
@@ -34,12 +34,29 @@ class BudgetCounter:
     optimizer_steps: int = 0
     parameter_write_units: int = 0
     examples_seen: int = 0
+    training_examples_processed: int = 0
+    tokens_processed: int = 0
     replay_examples_used: int = 0
+    write_budget_units: int | None = None
+    write_budget_exhausted_steps: int = 0
 
-    def record_step(self, params: Iterable[nn.Parameter], replay_examples: int = 0) -> None:
-        self.optimizer_steps += 1
-        self.parameter_write_units += sum(p.numel() for p in params if p.requires_grad)
+    @staticmethod
+    def step_write_units(params: Iterable[nn.Parameter]) -> int:
+        return sum(p.numel() for p in params if p.requires_grad)
+
+    def may_write(self, params: Iterable[nn.Parameter]) -> bool:
+        if self.write_budget_units is None:
+            return True
+        return self.parameter_write_units + self.step_write_units(params) <= self.write_budget_units
+
+    def record_compute(self, *, tokens: int, examples: int, replay_examples: int = 0) -> None:
+        self.training_examples_processed += examples
+        self.tokens_processed += tokens
         self.replay_examples_used += replay_examples
+
+    def record_step(self, params: Iterable[nn.Parameter]) -> None:
+        self.optimizer_steps += 1
+        self.parameter_write_units += self.step_write_units(params)
 
 
 class ReplayStore:
@@ -195,21 +212,36 @@ def encode_example(tokenizer, ex: Example) -> tuple[torch.Tensor, torch.Tensor, 
 def supervised_step(model: PromptStateLM, tokenizer, examples: Sequence[Example], optimizer: torch.optim.Optimizer,
                     budget: BudgetCounter, *, use_fast: bool, use_slow: bool, use_latent: bool,
                     update_latent: bool = True, replay_examples: int = 0) -> float:
+    """Process one adaptation batch and perform at most one optimizer write.
+
+    Replay examples contribute to the same optimizer step as the current example.
+    This makes optimizer/write accounting independent of batch cardinality and lets
+    EXP-001 match adaptation-token exposure separately from parameter writes.
+    """
+    params = [p for group in optimizer.param_groups for p in group["params"]]
+    can_write = budget.may_write(params)
+    optimizer.zero_grad(set_to_none=True)
     total = 0.0
+    total_tokens = 0
+    denom = max(len(examples), 1)
     for i, ex in enumerate(examples):
-        optimizer.zero_grad(set_to_none=True)
         ids, mask, labels = encode_example(tokenizer, ex)
+        total_tokens += int(ids.numel())
         out = model.forward_encoded(
             ids, mask, labels,
             use_slow=use_slow, use_fast=use_fast, use_latent=use_latent,
             update_latent=update_latent and i == len(examples) - 1,
         )
-        out.loss.backward()
-        params = [p for group in optimizer.param_groups for p in group["params"]]
-        optimizer.step()
-        budget.record_step(params, replay_examples=replay_examples)
+        if can_write:
+            (out.loss / denom).backward()
         total += float(out.loss.detach().cpu())
-    return total / max(len(examples), 1)
+    budget.record_compute(tokens=total_tokens, examples=len(examples), replay_examples=replay_examples)
+    if can_write:
+        optimizer.step()
+        budget.record_step(params)
+    else:
+        budget.write_budget_exhausted_steps += 1
+    return total / denom
 
 
 @torch.no_grad()
@@ -249,7 +281,7 @@ def multiple_choice_accuracy(model: PromptStateLM, tokenizer, examples: Sequence
 
 
 def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[Example], budget: BudgetCounter,
-                     cfg: LMExperimentConfig) -> None:
+                     cfg: LMExperimentConfig, steps: int | None = None) -> None:
     """Train slow state on replay with the current fast prompt disabled.
 
     This is deliberately not an algebraic fast->slow merge. Slow consolidation is
@@ -260,7 +292,10 @@ def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[
     if not replay_examples:
         return
     rng = random.Random(7729 + budget.optimizer_steps)
-    for _ in range(cfg.consolidation_steps):
+    planned_steps = cfg.consolidation_steps if steps is None else steps
+    for _ in range(planned_steps):
+        if not budget.may_write(params):
+            break
         batch = [rng.choice(replay_examples) for _ in range(min(cfg.consolidation_batch, len(replay_examples)))]
         supervised_step(
             model, tokenizer, batch, optimizer, budget,
@@ -272,7 +307,7 @@ def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[
 def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence[Example],
                       protected_test: Sequence[Example], candidates: Sequence[str], replay: ReplayStore,
                       budget: BudgetCounter, cfg: LMExperimentConfig, use_latent: bool = True,
-                      rollback_on_retention: bool = True) -> tuple[bool, dict[str, float]]:
+                      rollback_on_retention: bool = True, consolidation_steps: int | None = None) -> tuple[bool, dict[str, float]]:
     """Attempt slow consolidation behind an explicit candidate/commit boundary.
 
     ``use_latent`` supports the preregistered latent-state ablation.
@@ -296,7 +331,7 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
     retention_before = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
                                                 use_fast=True, use_slow=True, use_latent=use_latent) if protected_test else 1.0
     snapshot = model.snapshot_plastic_state()
-    consolidate_slow(model, tokenizer, replay.items, budget, cfg)
+    consolidate_slow(model, tokenizer, replay.items, budget, cfg, steps=consolidation_steps)
     current_after = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
                                              use_fast=False, use_slow=True, use_latent=use_latent)
     retention_after = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
