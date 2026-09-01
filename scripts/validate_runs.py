@@ -35,12 +35,35 @@ def main() -> None:
         reasons.append("primary_methods_not_paired_on_same_seed")
     if len({r.get("stream") for r in comparable}) > 1:
         reasons.append("primary_methods_not_on_same_stream")
+    tree_hashes = {r.get("source_tree_sha256") for r in comparable}
+    if None in tree_hashes or "" in tree_hashes:
+        reasons.append("missing_source_tree_hash")
+    elif len(tree_hashes) > 1:
+        reasons.append("primary_methods_use_different_source_trees")
     if len({r.get("model", {}).get("name") for r in comparable}) > 1:
         reasons.append("primary_methods_use_different_models")
     if any(not r.get("model", {}).get("backbone_frozen", False) for r in comparable):
         reasons.append("backbone_not_frozen")
     if any(r.get("invalidation_reasons") for r in comparable):
         reasons.append("run_level_invalidation_present")
+
+    # The strongest two-timescale controls must differ from B5 in routing, not
+    # in whether a persistent latent state exists.
+    matched_latent_methods = [r for r in runs if r.get("method") in {"fixed", "random", "promotion"}]
+    if matched_latent_methods and any(not r.get("model", {}).get("latent_state_enabled", False) for r in matched_latent_methods):
+        reasons.append("two_timescale_latent_architecture_mismatch")
+
+    promotion_runs = [r for r in runs if r.get("method", "").startswith("promotion")]
+    for r in promotion_runs:
+        audit = r.get("promotion_probe_audit", [])
+        if r.get("method") != "promotion-no-slow" and not audit:
+            reasons.append(f"missing_promotion_probe_audit:{r.get('method')}")
+        leaked = sum(int(x.get("heldout_gate_example_count", 0)) for x in audit)
+        if leaked:
+            reasons.append(f"heldout_gate_leak:{r.get('method')}:{leaked}")
+        budget = r.get("budget", {})
+        if "decision_tokens_processed" not in budget or "decision_forward_calls" not in budget:
+            reasons.append(f"missing_decision_compute_accounting:{r.get('method')}")
 
     for key in ["plastic_parameter_capacity"]:
         vals = [float(r["model"][key]) for r in comparable]

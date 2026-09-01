@@ -50,8 +50,8 @@ See [`experiments/EXP-001-PREREG.md`](experiments/EXP-001-PREREG.md).
 1. Frozen model.
 2. Sequential plastic adapter.
 3. Plastic adapter + replay.
-4. Fixed-schedule fast/slow consolidation.
-5. **State Promotion:** evidence-gated fast/slow consolidation + persistent latent state.
+4. Fixed-schedule fast/slow consolidation + persistent latent state.
+5. **State Promotion:** evidence-gated fast/slow consolidation + the same persistent latent state.
 
 The crucial comparisons must match:
 
@@ -92,7 +92,25 @@ This project is intentionally positioned as an extension/combination rather than
 - Keep pilot/smoke results separate from confirmatory runs.
 - Match budgets before interpreting architecture effects.
 - Treat ceiling effects, task leakage, and unequal write counts as invalidating confounds.
+- Never use held-out evaluation labels for promotion/rollback decisions; B5 gates only on already-observed training/replay evidence.
+- Count promotion-gate forward passes as decision-time inference compute.
+- Preserve optimizer state whenever the corresponding continual parameter state persists; orchestration segment boundaries are not learning resets.
+- Architecture-match persistent latent state across fixed, random, and learned-routing two-timescale controls.
+- Pair model initialization seeds across methods within each lifetime seed.
+- Record a deterministic source-tree fingerprint for archive pilots and require an actual code commit before confirmatory runs.
+- Keep development/calibration seeds disjoint from confirmatory seeds.
 - Record seeds and complete configs for every reported result.
+
+## Local gates
+
+```bash
+make test
+make pals
+# Requires transformers + a locally available/downloadable Qwen2.5-0.5B-Instruct:
+make lm-pilot
+```
+
+`make lm-pilot` runs the complete retention pilot (B0/B1/B2/B3/B5, derives the B4 commit-matched random control, then validates all manifests). `make lm-pilot-revision` runs the corresponding revision stream.
 
 ## Quick smoke test
 

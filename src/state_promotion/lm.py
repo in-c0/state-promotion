@@ -37,6 +37,8 @@ class BudgetCounter:
     training_examples_processed: int = 0
     tokens_processed: int = 0
     replay_examples_used: int = 0
+    decision_forward_calls: int = 0
+    decision_tokens_processed: int = 0
     write_budget_units: int | None = None
     write_budget_exhausted_steps: int = 0
 
@@ -53,6 +55,16 @@ class BudgetCounter:
         self.training_examples_processed += examples
         self.tokens_processed += tokens
         self.replay_examples_used += replay_examples
+
+    def record_decision_compute(self, *, tokens: int, forward_calls: int = 1) -> None:
+        """Account for inference that directly affects an adaptation decision.
+
+        Ordinary post-hoc evaluation is intentionally kept separate. Promotion-gate
+        probes are algorithmic compute because their scores determine whether a slow
+        write is committed or rolled back.
+        """
+        self.decision_tokens_processed += tokens
+        self.decision_forward_calls += forward_calls
 
     def record_step(self, params: Iterable[nn.Parameter]) -> None:
         self.optimizer_steps += 1
@@ -175,7 +187,7 @@ class PromptStateLM(nn.Module):
             self.latent.copy_(state["latent"])
 
 
-def load_model(cfg: LMExperimentConfig, device: str | None = None) -> tuple[PromptStateLM, object]:
+def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int = 1701) -> tuple[PromptStateLM, object]:
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     if device is None:
@@ -194,7 +206,7 @@ def load_model(cfg: LMExperimentConfig, device: str | None = None) -> tuple[Prom
     base.to(device)
     base.eval()
     hidden = int(base.get_input_embeddings().embedding_dim)
-    model = PromptStateLM(base, hidden, cfg, seed=1701).to(device)
+    model = PromptStateLM(base, hidden, cfg, seed=seed).to(device)
     return model, tokenizer
 
 
@@ -246,7 +258,8 @@ def supervised_step(model: PromptStateLM, tokenizer, examples: Sequence[Example]
 
 @torch.no_grad()
 def completion_nll(model: PromptStateLM, tokenizer, ex: Example, candidate: str, *,
-                   use_fast: bool = True, use_slow: bool = True, use_latent: bool = True) -> float:
+                   use_fast: bool = True, use_slow: bool = True, use_latent: bool = True,
+                   decision_budget: BudgetCounter | None = None) -> float:
     candidate_ex = Example(
         stream=ex.stream,
         segment=ex.segment,
@@ -258,6 +271,8 @@ def completion_nll(model: PromptStateLM, tokenizer, ex: Example, candidate: str,
         version=ex.version,
     )
     ids, mask, labels = encode_example(tokenizer, candidate_ex)
+    if decision_budget is not None:
+        decision_budget.record_decision_compute(tokens=int(ids.numel()))
     out = model.forward_encoded(ids, mask, labels, use_slow=use_slow, use_fast=use_fast,
                                 use_latent=use_latent, update_latent=False)
     return float(out.loss.detach().float().cpu())
@@ -266,7 +281,8 @@ def completion_nll(model: PromptStateLM, tokenizer, ex: Example, candidate: str,
 @torch.no_grad()
 def multiple_choice_accuracy(model: PromptStateLM, tokenizer, examples: Sequence[Example], candidates: Sequence[str],
                              *, use_fast: bool = True, use_slow: bool = True, use_latent: bool = True,
-                             max_examples: int | None = None) -> float:
+                             max_examples: int | None = None,
+                             decision_budget: BudgetCounter | None = None) -> float:
     if max_examples is not None:
         examples = examples[:max_examples]
     if not examples:
@@ -274,7 +290,7 @@ def multiple_choice_accuracy(model: PromptStateLM, tokenizer, examples: Sequence
     correct = 0
     for ex in examples:
         scores = [completion_nll(model, tokenizer, ex, c, use_fast=use_fast, use_slow=use_slow,
-                                 use_latent=use_latent) for c in candidates]
+                                 use_latent=use_latent, decision_budget=decision_budget) for c in candidates]
         pred = candidates[min(range(len(scores)), key=scores.__getitem__)]
         correct += int(pred == ex.target)
     return correct / len(examples)
@@ -304,8 +320,8 @@ def consolidate_slow(model: PromptStateLM, tokenizer, replay_examples: Sequence[
         )
 
 
-def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence[Example],
-                      protected_test: Sequence[Example], candidates: Sequence[str], replay: ReplayStore,
+def guarded_promotion(model: PromptStateLM, tokenizer, *, current_probe: Sequence[Example],
+                      protected_probe: Sequence[Example], candidates: Sequence[str], replay: ReplayStore,
                       budget: BudgetCounter, cfg: LMExperimentConfig, use_latent: bool = True,
                       rollback_on_retention: bool = True, consolidation_steps: int | None = None,
                       consolidation_examples: Sequence[Example] | None = None) -> tuple[bool, dict[str, float]]:
@@ -315,10 +331,23 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
     ``rollback_on_retention=False`` is the evidence-gate-without-retention-rollback
     ablation; it should never be used for the primary method.
     """
-    current_with_fast = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                                 use_fast=True, use_slow=True, use_latent=use_latent)
-    current_slow_only = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                                 use_fast=False, use_slow=True, use_latent=use_latent)
+    # Promotion decisions may only use already-observed attributable evidence.
+    # Passing held-out test examples here would leak evaluation labels into B5.
+    if any(ex.split != "train" for ex in current_probe):
+        raise ValueError("current promotion probe contains non-training examples")
+    if any(ex.split != "train" for ex in protected_probe):
+        raise ValueError("protected promotion probe contains non-training examples")
+
+    current_with_fast = multiple_choice_accuracy(
+        model, tokenizer, current_probe, candidates,
+        use_fast=True, use_slow=True, use_latent=use_latent,
+        decision_budget=budget,
+    )
+    current_slow_only = multiple_choice_accuracy(
+        model, tokenizer, current_probe, candidates,
+        use_fast=False, use_slow=True, use_latent=use_latent,
+        decision_budget=budget,
+    )
     fast_gain = current_with_fast - current_slow_only
     evidence = {
         "current_with_fast": current_with_fast,
@@ -329,15 +358,24 @@ def guarded_promotion(model: PromptStateLM, tokenizer, *, current_test: Sequence
         evidence["gate"] = 0.0
         return False, evidence
 
-    retention_before = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
-                                                use_fast=True, use_slow=True, use_latent=use_latent) if protected_test else 1.0
+    retention_before = multiple_choice_accuracy(
+        model, tokenizer, protected_probe, candidates,
+        use_fast=True, use_slow=True, use_latent=use_latent,
+        decision_budget=budget,
+    ) if protected_probe else 1.0
     snapshot = model.snapshot_plastic_state()
     evidence_examples = replay.items if consolidation_examples is None else consolidation_examples
     consolidate_slow(model, tokenizer, evidence_examples, budget, cfg, steps=consolidation_steps)
-    current_after = multiple_choice_accuracy(model, tokenizer, current_test, candidates,
-                                             use_fast=False, use_slow=True, use_latent=use_latent)
-    retention_after = multiple_choice_accuracy(model, tokenizer, protected_test, candidates,
-                                               use_fast=False, use_slow=True, use_latent=use_latent) if protected_test else 1.0
+    current_after = multiple_choice_accuracy(
+        model, tokenizer, current_probe, candidates,
+        use_fast=False, use_slow=True, use_latent=use_latent,
+        decision_budget=budget,
+    )
+    retention_after = multiple_choice_accuracy(
+        model, tokenizer, protected_probe, candidates,
+        use_fast=False, use_slow=True, use_latent=use_latent,
+        decision_budget=budget,
+    ) if protected_probe else 1.0
     retention_drop = retention_before - retention_after
     evidence.update({
         "retention_before": retention_before,
