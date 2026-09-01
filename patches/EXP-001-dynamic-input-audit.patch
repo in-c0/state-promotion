@@ -1,0 +1,296 @@
+diff --git a/docs/TASK-SIGNAL-AUDIT.md b/docs/TASK-SIGNAL-AUDIT.md
+index 81555d4..d9ff53e 100644
+--- a/docs/TASK-SIGNAL-AUDIT.md
++++ b/docs/TASK-SIGNAL-AUDIT.md
+@@ -31,8 +31,8 @@ The promotion arm is **not** allowed to inspect held-out evaluation labels. This
+ 
+ The experiment runner iterates the same segment boundaries for every arm. Segment boundaries are therefore a **shared orchestration signal**, not a private task ID:
+ 
+-- B1 sequential: optimizer is recreated at each shared segment boundary.
+-- B2 replay: same boundary cadence as B1.
++- B1 sequential: parameter and AdamW state persist across the shared segment boundary.
++- B2 replay: same persistent optimizer-state rule as B1.
+ - B3 fixed: slow consolidation occurs at the shared boundary.
+ - B4 random: a preregistered/matched schedule chooses which shared boundaries consolidate.
+ - B5 promotion: the evidence gate is evaluated at the same shared boundaries.
+@@ -43,9 +43,15 @@ The model itself is not passed the integer segment index. The random-control sch
+ 
+ `stream`, `segment`, `relation`, and `version` are used by the evaluator to construct retention/revision metrics. They are not injected into model prompts. Revision evaluation uses them to determine which historical mapping is currently valid; this is scoring logic, not learning input.
+ 
+-## Remaining leakage checks before confirmatory lock
++## Dynamic model-input audit
+ 
+-Before confirmatory seeds, inspect one serialized training batch and one held-out evaluation batch per arm and archive their hashes/manifests. Confirm that no method-specific code path adds segment IDs or held-out targets to the model input. Also verify from every B5 manifest that `heldout_gate_example_count == 0` and that decision-time inference counters are present.
++Every LM run now archives one actual tokenized online batch and one actual multiple-choice evaluation query in its result manifest under `batch_audit`. The archive separates harness-only audit metadata from the tensors passed to the model and records deterministic SHA-256 hashes of the model-visible tensors.
++
++For the online batch, validation requires every source example to be from the `train` split. For the evaluation query, the gold answer is audit-only metadata: every candidate is encoded and scored through the same completion-NLL path, and the manifest marks `gold_target_is_model_privileged = false`. The validator also requires the primary methods to receive identical first online model-visible inputs and identical first evaluation model-visible queries on a paired seed.
++
++`tests/test_batch_audit.py` verifies that changing harness-only `segment`, `split`, `relation`, and `version` metadata does not change the actual tokenized model input, and that changing which candidate is designated as the gold answer does not change the model-visible evaluation query.
++
++Before confirmatory lock, retain these per-run archives and additionally verify from every B5 manifest that `heldout_gate_example_count == 0` and that decision-time inference counters are present.
+ 
+ ## Continuous-state audit correction (2026-09-01)
+ 
+diff --git a/scripts/run_lm_pals.py b/scripts/run_lm_pals.py
+index e58ac50..ab30b78 100755
+--- a/scripts/run_lm_pals.py
++++ b/scripts/run_lm_pals.py
+@@ -23,6 +23,7 @@ from state_promotion.lm import (  # noqa: E402
+     ReplayStore,
+     completion_nll,
+     consolidate_slow,
++    encode_example,
+     guarded_promotion,
+     load_model,
+     multiple_choice_accuracy,
+@@ -142,6 +143,79 @@ def probe_hash(items: list[Example]) -> str:
+     return h.hexdigest()
+ 
+ 
++
++
++def _json_sha256(payload: object) -> str:
++    raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
++    return hashlib.sha256(raw).hexdigest()
++
++
++def encoded_example_audit(tokenizer, ex: Example) -> dict:
++    """Serialize exactly the tokenized supervised input, separated from audit metadata."""
++    ids, mask, labels = encode_example(tokenizer, ex)
++    model_input = {
++        "input_ids": ids[0].tolist(),
++        "attention_mask": mask[0].tolist(),
++        "labels": labels[0].tolist(),
++    }
++    return {
++        "audit_metadata": {
++            "stream": ex.stream,
++            "segment": ex.segment,
++            "split": ex.split,
++            "relation": ex.relation,
++            "version": ex.version,
++        },
++        "model_text": {"prompt": ex.prompt, "completion": ex.target},
++        "model_input": model_input,
++        "model_input_sha256": _json_sha256(model_input),
++    }
++
++
++def online_batch_audit(tokenizer, examples: list[Example], *, update_applied: bool, replay_examples: int) -> dict:
++    rows = [encoded_example_audit(tokenizer, ex) for ex in examples]
++    model_payload = [row["model_input"] for row in rows]
++    return {
++        "update_applied": update_applied,
++        "replay_examples": replay_examples,
++        "examples": rows,
++        "model_visible_batch_sha256": _json_sha256(model_payload),
++        "all_source_splits_train": all(ex.split == "train" for ex in examples),
++    }
++
++
++def eval_query_audit(tokenizer, ex: Example, candidates: list[str]) -> dict:
++    """Serialize one multiple-choice query exactly as candidates are scored.
++
++    The gold target is audit-only metadata. Every candidate, including the gold one,
++    is encoded and scored through the same completion-NLL path.
++    """
++    candidate_rows = []
++    for candidate in candidates:
++        candidate_ex = replace(ex, target=candidate)
++        row = encoded_example_audit(tokenizer, candidate_ex)
++        candidate_rows.append({
++            "candidate": candidate,
++            "model_input": row["model_input"],
++            "model_input_sha256": row["model_input_sha256"],
++        })
++    model_payload = [row["model_input"] for row in candidate_rows]
++    return {
++        "audit_metadata": {
++            "stream": ex.stream,
++            "segment": ex.segment,
++            "split": ex.split,
++            "relation": ex.relation,
++            "version": ex.version,
++            "gold_target": ex.target,
++            "gold_target_is_model_privileged": False,
++        },
++        "prompt": ex.prompt,
++        "candidate_order": list(candidates),
++        "candidate_encodings": candidate_rows,
++        "model_visible_query_sha256": _json_sha256(model_payload),
++    }
++
+ def predict(model, tokenizer, ex: Example, candidates: list[str], *, use_fast: bool, use_slow: bool,
+             use_latent: bool) -> str:
+     scores = [completion_nll(model, tokenizer, ex, c, use_fast=use_fast, use_slow=use_slow,
+@@ -216,6 +290,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+     matrix = []
+     promotion_log = []
+     promotion_probe_audit = []
++    batch_audit = {"first_online_batch": None, "first_eval_query": None}
+     revision_trajectory = []
+     started = time.perf_counter()
+     online_opt = None
+@@ -257,6 +332,10 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+                     sampled = replay.sample(cfg.replay_per_online_step)
+                     batch += sampled
+                     replay_used = len(sampled)
++                if batch_audit["first_online_batch"] is None:
++                    batch_audit["first_online_batch"] = online_batch_audit(
++                        tokenizer, batch, update_applied=True, replay_examples=replay_used,
++                    )
+                 supervised_step(
+                     model, tokenizer, batch, online_opt, budget,
+                     use_fast=True, use_slow=True, use_latent=use_latent,
+@@ -266,6 +345,10 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+                 if method != "promotion-no-replay":
+                     replay.add(ex)
+         else:
++            if train and batch_audit["first_online_batch"] is None:
++                batch_audit["first_online_batch"] = online_batch_audit(
++                    tokenizer, [train[0]], update_applied=False, replay_examples=0,
++                )
+             for ex in train:
+                 budget.examples_seen += 1
+                 replay.add(ex)
+@@ -320,6 +403,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+                 online_opt = None
+                 online_scope = None
+ 
++        if batch_audit["first_eval_query"] is None and segments[seg]["test"]:
++            batch_audit["first_eval_query"] = eval_query_audit(tokenizer, segments[seg]["test"][0], candidates)
++
+         if stream == "retention":
+             row = [float("nan")] * len(segments)
+             for old in range(seg + 1):
+@@ -392,6 +478,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+         "revision_trajectory": revision_trajectory,
+         "promotion_log": promotion_log,
+         "promotion_probe_audit": promotion_probe_audit,
++        "batch_audit": batch_audit,
+         "accepted_commit_segments": accepted_segments,
+         "random_commit_segments": sorted(random_commit_segments or []),
+         "invalidation_reasons": invalid,
+diff --git a/scripts/validate_runs.py b/scripts/validate_runs.py
+index 3b8e69b..d0683e3 100644
+--- a/scripts/validate_runs.py
++++ b/scripts/validate_runs.py
+@@ -53,6 +53,48 @@ def main() -> None:
+     if matched_latent_methods and any(not r.get("model", {}).get("latent_state_enabled", False) for r in matched_latent_methods):
+         reasons.append("two_timescale_latent_architecture_mismatch")
+ 
++    # Dynamic leakage audit: every run archives one actual tokenized online batch
++    # and one actual multiple-choice evaluation query. Audit-only metadata is kept
++    # structurally separate from model-visible tensors.
++    for r in runs:
++        method = r.get("method", "unknown")
++        audit = r.get("batch_audit", {})
++        online = audit.get("first_online_batch")
++        eval_query = audit.get("first_eval_query")
++        if not online:
++            reasons.append(f"missing_online_batch_audit:{method}")
++        else:
++            if not online.get("all_source_splits_train", False):
++                reasons.append(f"nontrain_example_in_online_batch_audit:{method}")
++            if any(x.get("audit_metadata", {}).get("split") != "train" for x in online.get("examples", [])):
++                reasons.append(f"online_batch_audit_split_mismatch:{method}")
++        if not eval_query:
++            reasons.append(f"missing_eval_query_audit:{method}")
++        else:
++            meta = eval_query.get("audit_metadata", {})
++            if meta.get("split") != "test":
++                reasons.append(f"eval_query_audit_split_mismatch:{method}")
++            if meta.get("gold_target_is_model_privileged") is not False:
++                reasons.append(f"eval_gold_target_privileged:{method}")
++
++    online_hashes = {
++        r.get("batch_audit", {}).get("first_online_batch", {}).get("model_visible_batch_sha256")
++        for r in comparable
++    }
++    if None in online_hashes or "" in online_hashes:
++        reasons.append("missing_primary_online_batch_hash")
++    elif len(online_hashes) > 1:
++        reasons.append("primary_methods_receive_different_first_online_model_inputs")
++
++    eval_hashes = {
++        r.get("batch_audit", {}).get("first_eval_query", {}).get("model_visible_query_sha256")
++        for r in comparable
++    }
++    if None in eval_hashes or "" in eval_hashes:
++        reasons.append("missing_primary_eval_query_hash")
++    elif len(eval_hashes) > 1:
++        reasons.append("primary_methods_receive_different_first_eval_model_inputs")
++
+     promotion_runs = [r for r in runs if r.get("method", "").startswith("promotion")]
+     for r in promotion_runs:
+         audit = r.get("promotion_probe_audit", [])
+diff --git a/tests/test_batch_audit.py b/tests/test_batch_audit.py
+new file mode 100644
+index 0000000..d4dd2d5
+--- /dev/null
++++ b/tests/test_batch_audit.py
+@@ -0,0 +1,64 @@
++import importlib.util
++from pathlib import Path
++
++from state_promotion.pals import Example
++
++SPEC = importlib.util.spec_from_file_location("run_lm_pals", Path(__file__).parents[1] / "scripts" / "run_lm_pals.py")
++MOD = importlib.util.module_from_spec(SPEC)
++SPEC.loader.exec_module(MOD)
++
++
++class TinyTokenizer:
++    eos_token_id = 0
++
++    def __call__(self, text, add_special_tokens=True):
++        ids = [10 + (ord(ch) % 67) for ch in text]
++        if add_special_tokens:
++            ids = [1] + ids
++        return {"input_ids": ids}
++
++
++def make_example(*, segment=0, split="train", relation="durable", version=1, target="ZARIN"):
++    return Example(
++        stream="retention",
++        segment=segment,
++        context="CTX",
++        key="KEY",
+        target=target,
++        split=split,
+        relation=relation,
+        version=version,
++    )
++
++
++def test_actual_tokenization_is_invariant_to_harness_only_metadata():
++    tok = TinyTokenizer()
++    a = make_example(segment=0, split="train", relation="durable", version=1)
++    b = make_example(segment=9, split="test", relation="supersedes", version=42)
++    aa = MOD.encoded_example_audit(tok, a)
++    bb = MOD.encoded_example_audit(tok, b)
++    assert aa["model_input_sha256"] == bb["model_input_sha256"]
++    assert aa["model_input"] == bb["model_input"]
++    assert aa["audit_metadata"] != bb["audit_metadata"]
++
++
++def test_online_batch_audit_fails_visible_if_nontrain_source_is_present():
++    tok = TinyTokenizer()
++    audit = MOD.online_batch_audit(
++        tok,
++        [make_example(split="train"), make_example(split="test")],
++        update_applied=True,
++        replay_examples=1,
++    )
++    assert audit["all_source_splits_train"] is False
++
++
++def test_eval_gold_target_is_not_privileged_in_model_visible_query():
++    tok = TinyTokenizer()
++    candidates = ["ZARIN", "VEVEK", "KITAL"]
++    a = MOD.eval_query_audit(tok, make_example(split="test", target="ZARIN"), candidates)
++    b = MOD.eval_query_audit(tok, make_example(split="test", target="VEVEK"), candidates)
++    assert a["model_visible_query_sha256"] == b["model_visible_query_sha256"]
++    assert a["audit_metadata"]["gold_target"] != b["audit_metadata"]["gold_target"]
++    assert a["audit_metadata"]["gold_target_is_model_privileged"] is False
++    assert len(a["candidate_encodings"]) == len(candidates)
