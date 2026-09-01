@@ -23,3 +23,14 @@ def test_revision_stream_contains_real_supersession():
     assert revised
     assert all(pair in old for pair in revised)
     assert all(old[pair] != target for pair, target in revised.items())
+
+
+def test_prompt_does_not_expose_hidden_task_metadata():
+    xs, _ = generate_revision_stream(19)
+    ex = xs[0]
+    prompt = ex.prompt.lower()
+    assert "segment" not in prompt
+    assert ex.stream.lower() not in prompt
+    assert ex.relation.lower() not in prompt
+    assert str(ex.version) not in prompt
+    assert ex.split.lower() not in prompt
