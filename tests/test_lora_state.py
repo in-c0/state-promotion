@@ -207,3 +207,52 @@ def test_initial_single_and_two_timescale_adapters_are_noop_and_deterministic():
         ids, mask, None, use_fast=True, use_slow=True, use_latent=False
     ).logits
     assert torch.equal(out_single, out_two)
+
+
+class TinyTokenizer:
+    eos_token_id = None
+
+    def __call__(self, text, add_special_tokens=True):
+        return {"input_ids": [1, 2, 3]}
+
+
+def test_lora_consolidation_uses_same_explicit_latent_mode_as_scoring():
+    from state_promotion.lm import LMExperimentConfig
+    from state_promotion.lora import consolidate_slow_lora
+    from state_promotion.pals import Example
+
+    model = LoRAStateLM(
+        TinyBase(),
+        hidden_size=8,
+        adapter_mode="two_timescale",
+        rank=1,
+        seed=23,
+    )
+    seen_latent_modes = []
+    original_forward = model.forward_encoded
+
+    def recorded_forward(*args, **kwargs):
+        seen_latent_modes.append(kwargs["use_latent"])
+        return original_forward(*args, **kwargs)
+
+    model.forward_encoded = recorded_forward
+    cfg = LMExperimentConfig(consolidation_steps=1, consolidation_batch=1)
+    ex = Example(
+        stream="retention",
+        segment=0,
+        context="CTX",
+        key="KEY",
+        target="CODE",
+        split="train",
+    )
+
+    consolidate_slow_lora(
+        model,
+        TinyTokenizer(),
+        [ex],
+        BudgetCounter(),
+        cfg,
+        use_latent=True,
+        steps=1,
+    )
+    assert seen_latent_modes == [True]
