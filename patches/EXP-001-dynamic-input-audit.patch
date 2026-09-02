@@ -31,6 +31,24 @@ index 81555d4..d9ff53e 100644
  
  ## Continuous-state audit correction (2026-09-01)
  
+diff --git a/scripts/run_exp001_pilot.py b/scripts/run_exp001_pilot.py
+index 5049ad7..1bb966c 100644
+--- a/scripts/run_exp001_pilot.py
++++ b/scripts/run_exp001_pilot.py
+@@ -65,11 +65,11 @@ def main() -> None:
+         "--out", str(random_out),
+     ])
+ 
+-    primary_paths = [result_path(args.out_dir, args.stream, m, args.seed) for m in ["sequential", "replay", "fixed", "promotion"]]
++    validation_paths = [result_path(args.out_dir, args.stream, m, args.seed) for m in ["frozen", "sequential", "replay", "fixed", "promotion"]]
+     validation_path = args.out_dir / f"validation-{args.stream}-{args.seed}.json"
+     validator = [
+         sys.executable, str(ROOT / "scripts" / "validate_runs.py"),
+-        *map(str, primary_paths), str(random_out),
++        *map(str, validation_paths), str(random_out),
+         "--out", str(validation_path),
+     ]
+     validation_rc = subprocess.run(validator, cwd=ROOT).returncode
 diff --git a/scripts/run_lm_pals.py b/scripts/run_lm_pals.py
 index e58ac50..ab30b78 100755
 --- a/scripts/run_lm_pals.py
@@ -172,10 +190,26 @@ index e58ac50..ab30b78 100755
          "random_commit_segments": sorted(random_commit_segments or []),
          "invalidation_reasons": invalid,
 diff --git a/scripts/validate_runs.py b/scripts/validate_runs.py
-index 3b8e69b..d0683e3 100644
+index 3b8e69b..d98bbd3 100644
 --- a/scripts/validate_runs.py
 +++ b/scripts/validate_runs.py
-@@ -53,6 +53,48 @@ def main() -> None:
+@@ -6,6 +6,7 @@ import json
+ from pathlib import Path
+ 
+ PRIMARY = {"sequential", "replay", "fixed", "promotion"}
++INPUT_AUDIT_METHODS = PRIMARY | {"frozen", "random"}
+ 
+ 
+ def rel_spread(values: list[float]) -> float:
+@@ -26,6 +27,7 @@ def main() -> None:
+     reasons: list[str] = []
+     methods = {r["method"] for r in runs}
+     comparable = [r for r in runs if r["method"] in PRIMARY]
++    input_comparable = [r for r in runs if r["method"] in INPUT_AUDIT_METHODS]
+ 
+     if not PRIMARY.issubset(methods):
+         reasons.append(f"missing_primary_methods:{sorted(PRIMARY - methods)}")
+@@ -53,6 +55,48 @@ def main() -> None:
      if matched_latent_methods and any(not r.get("model", {}).get("latent_state_enabled", False) for r in matched_latent_methods):
          reasons.append("two_timescale_latent_architecture_mismatch")
  
@@ -205,21 +239,21 @@ index 3b8e69b..d0683e3 100644
 +
 +    online_hashes = {
 +        r.get("batch_audit", {}).get("first_online_batch", {}).get("model_visible_batch_sha256")
-+        for r in comparable
++        for r in input_comparable
 +    }
 +    if None in online_hashes or "" in online_hashes:
-+        reasons.append("missing_primary_online_batch_hash")
++        reasons.append("missing_pilot_arm_online_batch_hash")
 +    elif len(online_hashes) > 1:
-+        reasons.append("primary_methods_receive_different_first_online_model_inputs")
++        reasons.append("pilot_arms_receive_different_first_online_model_inputs")
 +
 +    eval_hashes = {
 +        r.get("batch_audit", {}).get("first_eval_query", {}).get("model_visible_query_sha256")
-+        for r in comparable
++        for r in input_comparable
 +    }
 +    if None in eval_hashes or "" in eval_hashes:
-+        reasons.append("missing_primary_eval_query_hash")
++        reasons.append("missing_pilot_arm_eval_query_hash")
 +    elif len(eval_hashes) > 1:
-+        reasons.append("primary_methods_receive_different_first_eval_model_inputs")
++        reasons.append("pilot_arms_receive_different_first_eval_model_inputs")
 +
      promotion_runs = [r for r in runs if r.get("method", "").startswith("promotion")]
      for r in promotion_runs:
@@ -256,10 +290,10 @@ index 0000000..d4dd2d5
 +        segment=segment,
 +        context="CTX",
 +        key="KEY",
-        target=target,
++        target=target,
 +        split=split,
-        relation=relation,
-        version=version,
++        relation=relation,
++        version=version,
 +    )
 +
 +
