@@ -1,0 +1,3349 @@
+{
+  "classification": "DEVELOPMENT_CAPACITY_PROBE",
+  "note": "Not a protocol run, not an arm comparison, not evidence for or against H1.",
+  "git_sha": "5d66242590f3045e9dda096660b14a0d53df4ea4",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "device": "cpu",
+  "development_seeds": [
+    20260901,
+    20260902,
+    20260903
+  ],
+  "criterion": "mean mappings acquired across development seeds >= 5 of 6",
+  "passes": 6,
+  "summary": {
+    "prompt-8tok@lr0.005": {
+      "representation": "prompt-8tok",
+      "learning_rate": 0.005,
+      "trainable_elements": 7168,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 1.3333333333333333,
+      "per_seed_at_protocol_budget": [
+        2,
+        1,
+        1
+      ],
+      "mean_final_correct": 5.666666666666667,
+      "mean_best_correct": 5.666666666666667,
+      "per_seed_final": [
+        5,
+        6,
+        6
+      ],
+      "per_seed_best": [
+        5,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "prompt-8tok@lr0.02": {
+      "representation": "prompt-8tok",
+      "learning_rate": 0.02,
+      "trainable_elements": 7168,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 1.6666666666666667,
+      "per_seed_at_protocol_budget": [
+        1,
+        2,
+        2
+      ],
+      "mean_final_correct": 4.666666666666667,
+      "mean_best_correct": 4.666666666666667,
+      "per_seed_final": [
+        3,
+        5,
+        6
+      ],
+      "per_seed_best": [
+        3,
+        5,
+        6
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": false,
+      "meets_5of6_best": false
+    },
+    "prompt-128tok@lr0.005": {
+      "representation": "prompt-128tok",
+      "learning_rate": 0.005,
+      "trainable_elements": 114688,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 1.3333333333333333,
+      "per_seed_at_protocol_budget": [
+        1,
+        2,
+        1
+      ],
+      "mean_final_correct": 5.333333333333333,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        6,
+        6,
+        4
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "prompt-128tok@lr0.02": {
+      "representation": "prompt-128tok",
+      "learning_rate": 0.02,
+      "trainable_elements": 114688,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 1.0,
+      "per_seed_at_protocol_budget": [
+        1,
+        1,
+        1
+      ],
+      "mean_final_correct": 5.666666666666667,
+      "mean_best_correct": 5.666666666666667,
+      "per_seed_final": [
+        6,
+        6,
+        5
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        5
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "lora-r4@lr0.0001": {
+      "representation": "lora-r4",
+      "learning_rate": 0.0001,
+      "trainable_elements": 540672,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 3.0,
+      "per_seed_at_protocol_budget": [
+        1,
+        3,
+        5
+      ],
+      "mean_final_correct": 6.0,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        6,
+        6,
+        6
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "lora-r4@lr0.0005": {
+      "representation": "lora-r4",
+      "learning_rate": 0.0005,
+      "trainable_elements": 540672,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 5.666666666666667,
+      "per_seed_at_protocol_budget": [
+        6,
+        5,
+        6
+      ],
+      "mean_final_correct": 6.0,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        6,
+        6,
+        6
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": true,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "lora-r4@lr0.002": {
+      "representation": "lora-r4",
+      "learning_rate": 0.002,
+      "trainable_elements": 540672,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 4.0,
+      "per_seed_at_protocol_budget": [
+        5,
+        1,
+        6
+      ],
+      "mean_final_correct": 6.0,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        6,
+        6,
+        6
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": false,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "lora-r8@lr0.0005": {
+      "representation": "lora-r8",
+      "learning_rate": 0.0005,
+      "trainable_elements": 1081344,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 5.333333333333333,
+      "per_seed_at_protocol_budget": [
+        5,
+        5,
+        6
+      ],
+      "mean_final_correct": 6.0,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        6,
+        6,
+        6
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": true,
+      "meets_5of6_final": true,
+      "meets_5of6_best": true
+    },
+    "lora-r8@lr0.002": {
+      "representation": "lora-r8",
+      "learning_rate": 0.002,
+      "trainable_elements": 1081344,
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "mean_correct_at_protocol_budget": 5.333333333333333,
+      "per_seed_at_protocol_budget": [
+        6,
+        4,
+        6
+      ],
+      "mean_final_correct": 1.0,
+      "mean_best_correct": 6.0,
+      "per_seed_final": [
+        1,
+        1,
+        1
+      ],
+      "per_seed_best": [
+        6,
+        6,
+        6
+      ],
+      "meets_5of6_protocol_budget": true,
+      "meets_5of6_final": false,
+      "meets_5of6_best": true
+    }
+  },
+  "cells": [
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.005,
+      "seed": 20260901,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 5,
+      "best_correct": 5,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 0,
+          "distinct_predictions": 4
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 4.192996063580115,
+          "correct": 2,
+          "distinct_predictions": 3,
+          "predictions": [
+            "TADUL",
+            "SUMOS",
+            "SUMOS",
+            "SUMOS",
+            "SUDUL",
+            "SUMOS"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 2.0229901572068534,
+          "correct": 2,
+          "distinct_predictions": 4,
+          "predictions": [
+            "TADUL",
+            "SUMOS",
+            "SUDUL",
+            "TAQEN",
+            "SUDUL",
+            "SUMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 1.2225789198031027,
+          "correct": 2,
+          "distinct_predictions": 3,
+          "predictions": [
+            "TADUL",
+            "SUMOS",
+            "SUMOS",
+            "TAQEN",
+            "TAQEN",
+            "SUMOS"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.923197770336022,
+          "correct": 2,
+          "distinct_predictions": 4,
+          "predictions": [
+            "TADUL",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "VEPAX",
+            "TADUL"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.8722586830457052,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "TADUL",
+            "SUDUL",
+            "SUDUL",
+            "TADUL",
+            "TAQEN",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.46181428618729115,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 131.5
+    },
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.005,
+      "seed": 20260902,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 4.235172351201375,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.5755230616778135,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.8476296265920004,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "FISIV",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.6675979010760784,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.5131929498941948,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "FIFEN",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.34436064197992283,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 152.7
+    },
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.005,
+      "seed": 20260903,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.4231160593529544,
+          "correct": 1,
+          "distinct_predictions": 2,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "VEGUR",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.9227001980567971,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "VEGUR",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "VEGUR",
+            "VEGUR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.7605155883356929,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "FILOR",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "FILOR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.5439577019618204,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "VEGUR",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.13388056474893043,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.023932997244022165,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 133.6
+    },
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.02,
+      "seed": 20260901,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 3,
+      "best_correct": 3,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 0,
+          "distinct_predictions": 4
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 11.078436265389124,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 6.361470937728882,
+          "correct": 1,
+          "distinct_predictions": 2,
+          "predictions": [
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "SUDUL",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 4.428013314803441,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 2.5347009878605604,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 1.4874388032282393,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 1.2044930448755622,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "TADUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "TAQEN",
+            "SUDUL"
+          ]
+        }
+      ],
+      "wall_seconds": 141.2
+    },
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.02,
+      "seed": 20260902,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 5,
+      "best_correct": 5,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 4.572362204392751,
+          "correct": 2,
+          "distinct_predictions": 3,
+          "predictions": [
+            "FIFEN",
+            "POZIM",
+            "FIFEN",
+            "POZIM",
+            "POZIM",
+            "FISIV"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.6164321849743526,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "FIFEN",
+            "POZIM",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "FISIV"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.9104884341359138,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.4873529141768813,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "POQEN",
+            "POQEN",
+            "POZIM",
+            "FISIV",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.48093867332985,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "POZIM",
+            "FISIV",
+            "POZIM",
+            "POQEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.21660881668018797,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 122.6
+    },
+    {
+      "representation": "prompt-8tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 4
+      },
+      "learning_rate": 0.02,
+      "seed": 20260903,
+      "trainable_elements": 7168,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.6632415801286697,
+          "correct": 2,
+          "distinct_predictions": 3,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "RUVEK",
+            "VEGUR",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.0830212980508804,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "MOGUR",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.5991119138586024,
+          "correct": 3,
+          "distinct_predictions": 4,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.6504954326276978,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.18760960801349333,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.03965406119823456,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 129.0
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.005,
+      "seed": 20260901,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 2
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.070131191983819,
+          "correct": 1,
+          "distinct_predictions": 2,
+          "predictions": [
+            "TADUL",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TADUL",
+            "TADUL"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.0208201043618221,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "SUMOS",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.5795660655324658,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "TADUL",
+            "TAQEN",
+            "TAQEN",
+            "SUMOS",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.24380671219356978,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.2672218542235593,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.024461128278441418,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 253.4
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.005,
+      "seed": 20260902,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.60762936125199,
+          "correct": 2,
+          "distinct_predictions": 3,
+          "predictions": [
+            "FIFEN",
+            "POZIM",
+            "FIFEN",
+            "POZIM",
+            "POZIM",
+            "FISIV"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.561621058305415,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.26959281868766993,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "POGUR",
+            "POGUR",
+            "FIFEN",
+            "POGUR",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.3712620208583151,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.03956858775927685,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0022892611765807183,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 284.4
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.005,
+      "seed": 20260903,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 4,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.3935133181512356,
+          "correct": 1,
+          "distinct_predictions": 2,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "VEGUR",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.910254821802179,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.5438680841277043,
+          "correct": 3,
+          "distinct_predictions": 4,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "RUVEK",
+            "VEGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.2111861055212406,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.22484342680157474,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "NERIN",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "NERIN",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.2740122924442403,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "NERIN",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "VEGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 290.5
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.02,
+      "seed": 20260901,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 2
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.474538717418909,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.8633708187068502,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "SUDUL",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.3625657387310639,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.21076971004367806,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "TADUL",
+            "TAQEN",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.43690862295140204,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.03340612452302594,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 280.8
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.02,
+      "seed": 20260902,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 4.474218035737674,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.8756590820848942,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.8098713277528683,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.5400368229020387,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.5222687252486745,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "FIFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.13738294684056504,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 327.2
+    },
+    {
+      "representation": "prompt-128tok",
+      "kind": "prompt",
+      "params": {
+        "tokens": 64
+      },
+      "learning_rate": 0.02,
+      "seed": 20260903,
+      "trainable_elements": 114688,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 5,
+      "best_correct": 5,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.2835231392333903,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.9046154005142549,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.9926530630327761,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.6803108736251792,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.5204656506054258,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "NERIN",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.26799105730606243,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 287.4
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0001,
+      "seed": 20260901,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 7.000401837130387,
+          "correct": 1,
+          "distinct_predictions": 3,
+          "predictions": [
+            "SUDUL",
+            "VEFEN",
+            "SUDUL",
+            "TAQEN",
+            "VEFEN",
+            "SUDUL"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 1.2522844317524384,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.06097599980421364,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.006830197278759442,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0037278637755662203,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0027621504098836644,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 149.2
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0001,
+      "seed": 20260902,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 6.394777198632558,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "POGUR",
+            "POZIM",
+            "POZIM",
+            "POGUR",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.7228802416163186,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "POQEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.036548874263341226,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.00547614634463874,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.003553403706367438,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.002666249575365024,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 151.5
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0001,
+      "seed": 20260903,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 6.693425585826238,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "RUDUL",
+            "MOGUR",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.8945781084087988,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0291912907268852,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.007188461706391536,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.004677705093248126,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0034997749244212173,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 128.1
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260901,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 3.002896304242313,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.06771479825450417,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.00284573649939072,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0014692431529207777,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0010788450211596985,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0008453901015551916,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 142.3
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260902,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.6054274127818644,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "FISIV"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.044539636313857045,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.001636181599072491,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0009310539656629165,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.000673794672669222,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0005267020957641458,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 148.0
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260903,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.7552650426902496,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.026767861391514696,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0017778600595192984,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0010524823264859151,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0007580911375650127,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0005902038168035991,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 156.7
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.002,
+      "seed": 20260901,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.4874172889394686,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "TADUL",
+            "VEFEN",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.18526454197611505,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0017721150458479922,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0007219331528176554,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0004994736245862441,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0003862579057264763,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 139.0
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.002,
+      "seed": 20260902,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.167385937490811,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR",
+            "POGUR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.24936923060643798,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0025735221679497045,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0007779724146530498,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0005678228620430067,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.00044403551025122095,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 145.9
+    },
+    {
+      "representation": "lora-r4",
+      "kind": "lora",
+      "params": {
+        "rank": 4
+      },
+      "learning_rate": 0.002,
+      "seed": 20260903,
+      "trainable_elements": 540672,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 1.9154566823563073,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.01151322758232709,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0007536205551635552,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0004202176727024683,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0003055670201016862,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.00024022567595238797,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 159.4
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260901,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.574038511918237,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "TAQEN",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.10810252428927924,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.00365329204214504,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0014947113134743024,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0010334717517253011,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0007782906820163286,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        }
+      ],
+      "wall_seconds": 137.8
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260902,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.1305565036212406,
+          "correct": 5,
+          "distinct_predictions": 5,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.05566767443087883,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.0016619421330688056,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0009574467318695193,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.0006984117480897112,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.0005472921372226361,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        }
+      ],
+      "wall_seconds": 167.6
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.0005,
+      "seed": 20260903,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 6,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.281462235453849,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.008361488910547147,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 0.00120444770315468,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 0.0007692921050571991,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 0.000557022417827587,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 0.000429669664905911,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        }
+      ],
+      "wall_seconds": 165.1
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.002,
+      "seed": 20260901,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 1,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 1.9913447142074194,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "TADUL",
+            "VEPAX",
+            "SUDUL",
+            "SUMOS",
+            "TAQEN",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.6424509236918917,
+          "correct": 2,
+          "distinct_predictions": 2,
+          "predictions": [
+            "VEPAX",
+            "VEPAX",
+            "VEPAX",
+            "VEPAX",
+            "VEPAX",
+            "VEFEN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 4.137005818386872,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 3.3734699363509812,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 3.0932284568746886,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN",
+            "TAQEN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 3.1155810356140137,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL",
+            "SUDUL"
+          ]
+        }
+      ],
+      "wall_seconds": 148.4
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.002,
+      "seed": 20260902,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 1,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 3
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 2.1585069874611995,
+          "correct": 4,
+          "distinct_predictions": 4,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "POGUR",
+            "POZIM",
+            "POGUR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.1613306756092546,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "POGUR",
+            "POQEN",
+            "FIFEN",
+            "FISIV",
+            "POZIM",
+            "LIMOS"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 3.2065500592192016,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 2.9798371891180673,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 2.7525069614251456,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 2.670919100443522,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM",
+            "POZIM"
+          ]
+        }
+      ],
+      "wall_seconds": 191.6
+    },
+    {
+      "representation": "lora-r8",
+      "kind": "lora",
+      "params": {
+        "rank": 8
+      },
+      "learning_rate": 0.002,
+      "seed": 20260903,
+      "trainable_elements": 1081344,
+      "backbone_frozen": true,
+      "n_mappings": 6,
+      "final_correct": 1,
+      "best_correct": 6,
+      "trajectory": [
+        {
+          "pass": 0,
+          "steps": 0,
+          "correct": 1,
+          "distinct_predictions": 1
+        },
+        {
+          "pass": 1,
+          "steps": 48,
+          "mean_loss": 1.9831797101069242,
+          "correct": 6,
+          "distinct_predictions": 6,
+          "predictions": [
+            "RUDUL",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "MOGUR",
+            "FILOR"
+          ]
+        },
+        {
+          "pass": 2,
+          "steps": 96,
+          "mean_loss": 0.41362842647504294,
+          "correct": 3,
+          "distinct_predictions": 3,
+          "predictions": [
+            "NERIN",
+            "RUVEK",
+            "NERIN",
+            "VEGUR",
+            "NERIN",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 3,
+          "steps": 144,
+          "mean_loss": 3.641578766362121,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK",
+            "RUVEK"
+          ]
+        },
+        {
+          "pass": 4,
+          "steps": 192,
+          "mean_loss": 2.9045078307390213,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 5,
+          "steps": 240,
+          "mean_loss": 2.841085471212864,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN"
+          ]
+        },
+        {
+          "pass": 6,
+          "steps": 288,
+          "mean_loss": 2.830780732134978,
+          "correct": 1,
+          "distinct_predictions": 1,
+          "predictions": [
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN",
+            "NERIN"
+          ]
+        }
+      ],
+      "wall_seconds": 173.6
+    }
+  ]
+}
