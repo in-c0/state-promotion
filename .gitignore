@@ -11,3 +11,4 @@ results/*.csv
 results/*.png
 !results/.gitkeep
 .DS_Store
+*.egg-info/

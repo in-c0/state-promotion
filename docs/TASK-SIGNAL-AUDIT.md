@@ -31,8 +31,8 @@ The promotion arm is **not** allowed to inspect held-out evaluation labels. This
 
 The experiment runner iterates the same segment boundaries for every arm. Segment boundaries are therefore a **shared orchestration signal**, not a private task ID:
 
-- B1 sequential: optimizer is recreated at each shared segment boundary.
-- B2 replay: same boundary cadence as B1.
+- B1 sequential: parameter and AdamW state persist across the shared segment boundary.
+- B2 replay: same persistent optimizer-state rule as B1.
 - B3 fixed: slow consolidation occurs at the shared boundary.
 - B4 random: a preregistered/matched schedule chooses which shared boundaries consolidate.
 - B5 promotion: the evidence gate is evaluated at the same shared boundaries.
@@ -43,9 +43,15 @@ The model itself is not passed the integer segment index. The random-control sch
 
 `stream`, `segment`, `relation`, and `version` are used by the evaluator to construct retention/revision metrics. They are not injected into model prompts. Revision evaluation uses them to determine which historical mapping is currently valid; this is scoring logic, not learning input.
 
-## Remaining leakage checks before confirmatory lock
+## Dynamic model-input audit
 
-Before confirmatory seeds, inspect one serialized training batch and one held-out evaluation batch per arm and archive their hashes/manifests. Confirm that no method-specific code path adds segment IDs or held-out targets to the model input. Also verify from every B5 manifest that `heldout_gate_example_count == 0` and that decision-time inference counters are present.
+Every LM run now archives one actual tokenized online batch and one actual multiple-choice evaluation query in its result manifest under `batch_audit`. The archive separates harness-only audit metadata from the tensors passed to the model and records deterministic SHA-256 hashes of the model-visible tensors.
+
+For the online batch, validation requires every source example to be from the `train` split. For the evaluation query, the gold answer is audit-only metadata: every candidate is encoded and scored through the same completion-NLL path, and the manifest marks `gold_target_is_model_privileged = false`. The validator also requires all six pilot arms (frozen, sequential, replay, fixed, promotion, random) to receive identical first online model-visible inputs and identical first evaluation model-visible queries on a paired seed.
+
+`tests/test_batch_audit.py` verifies that changing harness-only `segment`, `split`, `relation`, and `version` metadata does not change the actual tokenized model input, and that changing which candidate is designated as the gold answer does not change the model-visible evaluation query.
+
+Before confirmatory lock, retain these per-run archives and additionally verify from every B5 manifest that `heldout_gate_example_count == 0` and that decision-time inference counters are present.
 
 ## Continuous-state audit correction (2026-09-01)
 

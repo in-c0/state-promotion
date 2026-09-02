@@ -15,6 +15,7 @@ from .pals import Example
 @dataclass
 class LMExperimentConfig:
     model_name: str = "Qwen/Qwen2.5-0.5B-Instruct"
+    model_revision: str | None = None
     slow_tokens: int = 4
     fast_tokens: int = 4
     latent_decay: float = 0.95
@@ -199,10 +200,10 @@ def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int 
             device = "cpu"
 
     dtype = torch.float16 if device in {"cuda", "mps"} else torch.float32
-    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name, use_fast=True)
+    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name, revision=cfg.model_revision, use_fast=True)
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
-    base = AutoModelForCausalLM.from_pretrained(cfg.model_name, torch_dtype=dtype)
+    base = AutoModelForCausalLM.from_pretrained(cfg.model_name, revision=cfg.model_revision, torch_dtype=dtype)
     base.to(device)
     base.eval()
     hidden = int(base.get_input_embeddings().embedding_dim)

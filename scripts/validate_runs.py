@@ -6,6 +6,19 @@ import json
 from pathlib import Path
 
 PRIMARY = {"sequential", "replay", "fixed", "promotion"}
+INPUT_AUDIT_METHODS = PRIMARY | {"frozen", "random"}
+
+
+def audit_hash(run: dict, section: str, field: str) -> str | None:
+    """Read one model-visible input hash without assuming the audit was archived.
+
+    A run that never reached an online batch or an evaluation query serializes the
+    section as ``null``. That is a diagnostic the validator must report as a missing
+    audit, not an exception that suppresses every other reason.
+    """
+    audit = run.get("batch_audit") or {}
+    section_payload = audit.get(section) or {}
+    return section_payload.get(field)
 
 
 def rel_spread(values: list[float]) -> float:
@@ -26,6 +39,7 @@ def main() -> None:
     reasons: list[str] = []
     methods = {r["method"] for r in runs}
     comparable = [r for r in runs if r["method"] in PRIMARY]
+    input_comparable = [r for r in runs if r["method"] in INPUT_AUDIT_METHODS]
 
     if not PRIMARY.issubset(methods):
         reasons.append(f"missing_primary_methods:{sorted(PRIMARY - methods)}")
@@ -42,6 +56,20 @@ def main() -> None:
         reasons.append("primary_methods_use_different_source_trees")
     if len({r.get("model", {}).get("name") for r in comparable}) > 1:
         reasons.append("primary_methods_use_different_models")
+    snapshot_revisions = {r.get("model", {}).get("snapshot_revision") for r in input_comparable}
+    if None in snapshot_revisions or "" in snapshot_revisions:
+        reasons.append("pilot_model_snapshot_not_pinned")
+    elif len(snapshot_revisions) > 1:
+        reasons.append("pilot_arms_use_different_model_snapshots")
+    elif snapshot_revisions:
+        pinned = next(iter(snapshot_revisions))
+        for r in input_comparable:
+            reported_model = r.get("model", {}).get("model_revision")
+            reported_tokenizer = r.get("model", {}).get("tokenizer_revision")
+            if reported_model and reported_model != pinned:
+                reasons.append(f"reported_model_revision_differs_from_pin:{r.get('method')}")
+            if reported_tokenizer and reported_tokenizer != pinned:
+                reasons.append(f"reported_tokenizer_revision_differs_from_pin:{r.get('method')}")
     if any(not r.get("model", {}).get("backbone_frozen", False) for r in comparable):
         reasons.append("backbone_not_frozen")
     if any(r.get("invalidation_reasons") for r in comparable):
@@ -52,6 +80,42 @@ def main() -> None:
     matched_latent_methods = [r for r in runs if r.get("method") in {"fixed", "random", "promotion"}]
     if matched_latent_methods and any(not r.get("model", {}).get("latent_state_enabled", False) for r in matched_latent_methods):
         reasons.append("two_timescale_latent_architecture_mismatch")
+
+    # Dynamic leakage audit: every run archives one actual tokenized online batch
+    # and one actual multiple-choice evaluation query. Audit-only metadata is kept
+    # structurally separate from model-visible tensors.
+    for r in runs:
+        method = r.get("method", "unknown")
+        audit = r.get("batch_audit", {})
+        online = audit.get("first_online_batch")
+        eval_query = audit.get("first_eval_query")
+        if not online:
+            reasons.append(f"missing_online_batch_audit:{method}")
+        else:
+            if not online.get("all_source_splits_train", False):
+                reasons.append(f"nontrain_example_in_online_batch_audit:{method}")
+            if any(x.get("audit_metadata", {}).get("split") != "train" for x in online.get("examples", [])):
+                reasons.append(f"online_batch_audit_split_mismatch:{method}")
+        if not eval_query:
+            reasons.append(f"missing_eval_query_audit:{method}")
+        else:
+            meta = eval_query.get("audit_metadata", {})
+            if meta.get("split") != "test":
+                reasons.append(f"eval_query_audit_split_mismatch:{method}")
+            if meta.get("gold_target_is_model_privileged") is not False:
+                reasons.append(f"eval_gold_target_privileged:{method}")
+
+    online_hashes = {audit_hash(r, "first_online_batch", "model_visible_batch_sha256") for r in input_comparable}
+    if None in online_hashes or "" in online_hashes:
+        reasons.append("missing_pilot_arm_online_batch_hash")
+    elif len(online_hashes) > 1:
+        reasons.append("pilot_arms_receive_different_first_online_model_inputs")
+
+    eval_hashes = {audit_hash(r, "first_eval_query", "model_visible_query_sha256") for r in input_comparable}
+    if None in eval_hashes or "" in eval_hashes:
+        reasons.append("missing_pilot_arm_eval_query_hash")
+    elif len(eval_hashes) > 1:
+        reasons.append("pilot_arms_receive_different_first_eval_model_inputs")
 
     promotion_runs = [r for r in runs if r.get("method", "").startswith("promotion")]
     for r in promotion_runs:

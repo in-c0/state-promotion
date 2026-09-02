@@ -23,6 +23,7 @@ from state_promotion.lm import (  # noqa: E402
     ReplayStore,
     completion_nll,
     consolidate_slow,
+    encode_example,
     guarded_promotion,
     load_model,
     multiple_choice_accuracy,
@@ -142,6 +143,79 @@ def probe_hash(items: list[Example]) -> str:
     return h.hexdigest()
 
 
+
+
+def _json_sha256(payload: object) -> str:
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
+def encoded_example_audit(tokenizer, ex: Example) -> dict:
+    """Serialize exactly the tokenized supervised input, separated from audit metadata."""
+    ids, mask, labels = encode_example(tokenizer, ex)
+    model_input = {
+        "input_ids": ids[0].tolist(),
+        "attention_mask": mask[0].tolist(),
+        "labels": labels[0].tolist(),
+    }
+    return {
+        "audit_metadata": {
+            "stream": ex.stream,
+            "segment": ex.segment,
+            "split": ex.split,
+            "relation": ex.relation,
+            "version": ex.version,
+        },
+        "model_text": {"prompt": ex.prompt, "completion": ex.target},
+        "model_input": model_input,
+        "model_input_sha256": _json_sha256(model_input),
+    }
+
+
+def online_batch_audit(tokenizer, examples: list[Example], *, update_applied: bool, replay_examples: int) -> dict:
+    rows = [encoded_example_audit(tokenizer, ex) for ex in examples]
+    model_payload = [row["model_input"] for row in rows]
+    return {
+        "update_applied": update_applied,
+        "replay_examples": replay_examples,
+        "examples": rows,
+        "model_visible_batch_sha256": _json_sha256(model_payload),
+        "all_source_splits_train": all(ex.split == "train" for ex in examples),
+    }
+
+
+def eval_query_audit(tokenizer, ex: Example, candidates: list[str]) -> dict:
+    """Serialize one multiple-choice query exactly as candidates are scored.
+
+    The gold target is audit-only metadata. Every candidate, including the gold one,
+    is encoded and scored through the same completion-NLL path.
+    """
+    candidate_rows = []
+    for candidate in candidates:
+        candidate_ex = replace(ex, target=candidate)
+        row = encoded_example_audit(tokenizer, candidate_ex)
+        candidate_rows.append({
+            "candidate": candidate,
+            "model_input": row["model_input"],
+            "model_input_sha256": row["model_input_sha256"],
+        })
+    model_payload = [row["model_input"] for row in candidate_rows]
+    return {
+        "audit_metadata": {
+            "stream": ex.stream,
+            "segment": ex.segment,
+            "split": ex.split,
+            "relation": ex.relation,
+            "version": ex.version,
+            "gold_target": ex.target,
+            "gold_target_is_model_privileged": False,
+        },
+        "prompt": ex.prompt,
+        "candidate_order": list(candidates),
+        "candidate_encodings": candidate_rows,
+        "model_visible_query_sha256": _json_sha256(model_payload),
+    }
+
 def predict(model, tokenizer, ex: Example, candidates: list[str], *, use_fast: bool, use_slow: bool,
             use_latent: bool) -> str:
     scores = [completion_nll(model, tokenizer, ex, c, use_fast=use_fast, use_slow=use_slow,
@@ -216,6 +290,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
     matrix = []
     promotion_log = []
     promotion_probe_audit = []
+    batch_audit = {"first_online_batch": None, "first_eval_query": None}
     revision_trajectory = []
     started = time.perf_counter()
     online_opt = None
@@ -257,6 +332,10 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                     sampled = replay.sample(cfg.replay_per_online_step)
                     batch += sampled
                     replay_used = len(sampled)
+                if batch_audit["first_online_batch"] is None:
+                    batch_audit["first_online_batch"] = online_batch_audit(
+                        tokenizer, batch, update_applied=True, replay_examples=replay_used,
+                    )
                 supervised_step(
                     model, tokenizer, batch, online_opt, budget,
                     use_fast=True, use_slow=True, use_latent=use_latent,
@@ -266,6 +345,10 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 if method != "promotion-no-replay":
                     replay.add(ex)
         else:
+            if train and batch_audit["first_online_batch"] is None:
+                batch_audit["first_online_batch"] = online_batch_audit(
+                    tokenizer, [train[0]], update_applied=False, replay_examples=0,
+                )
             for ex in train:
                 budget.examples_seen += 1
                 replay.add(ex)
@@ -320,6 +403,9 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
                 online_opt = None
                 online_scope = None
 
+        if batch_audit["first_eval_query"] is None and segments[seg]["test"]:
+            batch_audit["first_eval_query"] = eval_query_audit(tokenizer, segments[seg]["test"][0], candidates)
+
         if stream == "retention":
             row = [float("nan")] * len(segments)
             for old in range(seg + 1):
@@ -362,6 +448,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         "config": asdict(cfg),
         "model": {
             "name": cfg.model_name,
+            "snapshot_revision": cfg.model_revision,
             "device": str(model.device),
             "base_parameters": base_params,
             "plastic_parameter_capacity": plastic_params,
@@ -392,6 +479,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
         "revision_trajectory": revision_trajectory,
         "promotion_log": promotion_log,
         "promotion_probe_audit": promotion_probe_audit,
+        "batch_audit": batch_audit,
         "accepted_commit_segments": accepted_segments,
         "random_commit_segments": sorted(random_commit_segments or []),
         "invalidation_reasons": invalid,
@@ -413,6 +501,7 @@ def main() -> None:
     p.add_argument("--stream", choices=["retention", "revision"], default="retention")
     p.add_argument("--seed", type=int, default=20260901)
     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
+    p.add_argument("--model-revision", default=None, help="Immutable Hugging Face snapshot SHA. Required for a validator-clean pilot.")
     p.add_argument("--eval-cap", type=int, default=None, help="Pilot-only cap on test examples")
     p.add_argument("--random-commit-segments", default=None, help="Comma-separated segments for matched random control")
     p.add_argument("--write-step-budget", type=int, default=None,
@@ -420,7 +509,7 @@ def main() -> None:
     p.add_argument("--out", type=Path, default=None)
     args = p.parse_args()
 
-    cfg = LMExperimentConfig(model_name=args.model)
+    cfg = LMExperimentConfig(model_name=args.model, model_revision=args.model_revision)
     payload = run(
         args.method, args.seed, cfg,
         stream=args.stream,

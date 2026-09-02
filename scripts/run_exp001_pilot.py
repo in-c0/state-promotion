@@ -21,12 +21,34 @@ def result_path(out_dir: Path, stream: str, method: str, seed: int) -> Path:
     return out_dir / f"lm-{stream}-{method}-{seed}.json"
 
 
+def resolve_model_revision(model: str, requested_revision: str | None = None) -> str:
+    """Resolve one immutable HF snapshot before any arm starts."""
+    from huggingface_hub import snapshot_download
+
+    kwargs = {
+        "repo_id": model,
+        "revision": requested_revision or "main",
+        "allow_patterns": ["config.json"],
+    }
+    try:
+        snapshot = Path(snapshot_download(**kwargs))
+    except Exception:
+        # A fully cached host should remain usable if Hugging Face is temporarily
+        # unreachable. The cached ref still resolves to an immutable snapshot dir.
+        snapshot = Path(snapshot_download(**kwargs, local_files_only=True))
+    revision = snapshot.name
+    if len(revision) < 12:
+        raise RuntimeError(f"Could not resolve immutable model snapshot from {snapshot}")
+    return revision
+
+
 def main() -> None:
     p = argparse.ArgumentParser(
         description="Run the EXP-001 engineering pilot, derive a count-matched random control, and validate manifests."
     )
     p.add_argument("--seed", type=int, default=20260901)
     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
+    p.add_argument("--model-revision", default=None, help="Optional HF ref/SHA; resolved to one immutable snapshot before the first arm.")
     p.add_argument("--stream", choices=["retention", "revision"], default="retention")
     p.add_argument("--eval-cap", type=int, default=4,
                    help="Pilot evaluation cap. Use a small value for the first engineering run.")
@@ -34,10 +56,13 @@ def main() -> None:
     args = p.parse_args()
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    resolved_revision = resolve_model_revision(args.model, args.model_revision)
+    print(f"Pinned model snapshot: {args.model}@{resolved_revision}", flush=True)
     common = [
         sys.executable, str(ROOT / "scripts" / "run_lm_pals.py"),
         "--seed", str(args.seed),
         "--model", args.model,
+        "--model-revision", resolved_revision,
         "--stream", args.stream,
         "--eval-cap", str(args.eval_cap),
     ]
@@ -65,11 +90,11 @@ def main() -> None:
         "--out", str(random_out),
     ])
 
-    primary_paths = [result_path(args.out_dir, args.stream, m, args.seed) for m in ["sequential", "replay", "fixed", "promotion"]]
+    validation_paths = [result_path(args.out_dir, args.stream, m, args.seed) for m in ["frozen", "sequential", "replay", "fixed", "promotion"]]
     validation_path = args.out_dir / f"validation-{args.stream}-{args.seed}.json"
     validator = [
         sys.executable, str(ROOT / "scripts" / "validate_runs.py"),
-        *map(str, primary_paths), str(random_out),
+        *map(str, validation_paths), str(random_out),
         "--out", str(validation_path),
     ]
     validation_rc = subprocess.run(validator, cwd=ROOT).returncode
@@ -78,6 +103,7 @@ def main() -> None:
         "classification": "ENGINEERING_PILOT",
         "seed": args.seed,
         "model": args.model,
+        "model_revision": resolved_revision,
         "stream": args.stream,
         "eval_cap": args.eval_cap,
         "promotion_accepted_segments": accepted,
