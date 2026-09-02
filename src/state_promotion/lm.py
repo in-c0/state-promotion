@@ -348,12 +348,37 @@ def completion_nll(model: PromptStateLM, tokenizer, ex: Example, candidate: str,
 
 
 @torch.no_grad()
+def cap_distinct_examples(examples: Sequence[Example], max_examples: int) -> list[Example]:
+    """Cap an evaluation set by distinct mapping, not by raw position.
+
+    PALS emits ``test_repeats`` consecutive copies of each ``(context, key)``
+    mapping, so a positional cap silently narrows coverage: ``max_examples=4``
+    with ``test_repeats=2`` scored only 2 of the 6 mappings in a segment, which
+    both quantized every accuracy to a multiple of 0.5 and left two thirds of
+    each segment unmeasured.
+
+    Distinct mappings are taken first, in stream order, before any repeat is
+    used, so a cap spends its budget on coverage. This changes only which test
+    examples a pilot-only compute cap looks at; it does not touch PALS content,
+    the scoring rule, or any adaptation behaviour, and an uncapped run is
+    unaffected.
+    """
+    by_mapping: dict[tuple[str, str], list[Example]] = {}
+    for ex in examples:
+        by_mapping.setdefault((ex.context, ex.key), []).append(ex)
+    selected = [group[0] for group in by_mapping.values()][:max_examples]
+    if len(selected) < max_examples:
+        repeats = [ex for group in by_mapping.values() for ex in group[1:]]
+        selected += repeats[:max_examples - len(selected)]
+    return selected
+
+
 def multiple_choice_accuracy(model: PromptStateLM, tokenizer, examples: Sequence[Example], candidates: Sequence[str],
                              *, use_fast: bool = True, use_slow: bool = True, use_latent: bool = True,
                              max_examples: int | None = None,
                              decision_budget: BudgetCounter | None = None) -> float:
     if max_examples is not None:
-        examples = examples[:max_examples]
+        examples = cap_distinct_examples(examples, max_examples)
     if not examples:
         return float("nan")
     correct = 0

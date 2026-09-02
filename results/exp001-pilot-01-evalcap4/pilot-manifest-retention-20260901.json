@@ -1,0 +1,14 @@
+{
+  "classification": "ENGINEERING_PILOT",
+  "seed": 20260901,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "device": "cpu",
+  "stream": "retention",
+  "eval_cap": 4,
+  "promotion_accepted_segments": [],
+  "matched_random_segments": [],
+  "validator_return_code": 0,
+  "validator_passed": true,
+  "note": "A validator failure is a diagnostic pilot outcome, not an experiment failure and not evidence for H1."
+}

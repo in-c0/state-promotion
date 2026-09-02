@@ -1,0 +1,14 @@
+{
+  "valid_for_confirmatory_interpretation": true,
+  "tolerance": 0.02,
+  "methods": [
+    "fixed",
+    "frozen",
+    "promotion",
+    "random",
+    "replay",
+    "sequential"
+  ],
+  "reasons": [],
+  "note": "This validates machine-checkable budget/control conditions only; preregistered benchmark validity and statistics still apply."
+}
