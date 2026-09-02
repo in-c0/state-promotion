@@ -1,0 +1,241 @@
+diff --git a/docs/TASK-SIGNAL-AUDIT.md b/docs/TASK-SIGNAL-AUDIT.md
+index d9ff53e..b114c6e 100644
+--- a/docs/TASK-SIGNAL-AUDIT.md
++++ b/docs/TASK-SIGNAL-AUDIT.md
+@@ -47,7 +47,7 @@ The model itself is not passed the integer segment index. The random-control sch
+ 
+ Every LM run now archives one actual tokenized online batch and one actual multiple-choice evaluation query in its result manifest under `batch_audit`. The archive separates harness-only audit metadata from the tensors passed to the model and records deterministic SHA-256 hashes of the model-visible tensors.
+ 
+-For the online batch, validation requires every source example to be from the `train` split. For the evaluation query, the gold answer is audit-only metadata: every candidate is encoded and scored through the same completion-NLL path, and the manifest marks `gold_target_is_model_privileged = false`. The validator also requires the primary methods to receive identical first online model-visible inputs and identical first evaluation model-visible queries on a paired seed.
++For the online batch, validation requires every source example to be from the `train` split. For the evaluation query, the gold answer is audit-only metadata: every candidate is encoded and scored through the same completion-NLL path, and the manifest marks `gold_target_is_model_privileged = false`. The validator also requires all six pilot arms (frozen, sequential, replay, fixed, promotion, random) to receive identical first online model-visible inputs and identical first evaluation model-visible queries on a paired seed.
+ 
+ `tests/test_batch_audit.py` verifies that changing harness-only `segment`, `split`, `relation`, and `version` metadata does not change the actual tokenized model input, and that changing which candidate is designated as the gold answer does not change the model-visible evaluation query.
+ 
+diff --git a/experiments/EXP-001-AMENDMENT-F.md b/experiments/EXP-001-AMENDMENT-F.md
+new file mode 100644
+index 0000000..90c5e1e
+--- /dev/null
++++ b/experiments/EXP-001-AMENDMENT-F.md
+@@ -0,0 +1,17 @@
++# EXP-001 pre-result Amendment F — immutable paired model snapshot
++
++**Status:** locked before any EXP-001 language-model score is inspected.
++
++## Problem discovered in execution review
++
++The pilot runner named `Qwen/Qwen2.5-0.5B-Instruct` but did not require an immutable Hugging Face revision. Each arm could therefore resolve the moving repository ref independently. Even if unlikely over a short pilot, repository drift would break the paired-method assumption and weaken exact reproducibility.
++
++## Locked rule
++
++1. The full pilot orchestrator resolves the requested model ref to one immutable Hugging Face snapshot SHA **before the first arm runs**.
++2. That exact SHA is passed to both tokenizer and model loading for every arm, including frozen and the post-hoc commit-count-matched random control.
++3. Every run manifest records the pinned `snapshot_revision` plus any revision reported by the loaded model/tokenizer objects.
++4. The validator rejects a missing snapshot pin, mixed snapshot SHAs across pilot arms, or a reported model/tokenizer revision that conflicts with the pin.
++5. Development pilots may establish which immutable snapshot becomes the confirmatory model revision, but confirmatory protocol v1.0 must freeze it explicitly.
++
++This amendment changes provenance control only. It does not alter PALS examples, adaptation rules, routing thresholds, resource budgets, or H1.
+diff --git a/scripts/run_exp001_pilot.py b/scripts/run_exp001_pilot.py
+index 1bb966c..52a1d07 100644
+--- a/scripts/run_exp001_pilot.py
++++ b/scripts/run_exp001_pilot.py
+@@ -21,12 +21,34 @@ def result_path(out_dir: Path, stream: str, method: str, seed: int) -> Path:
+     return out_dir / f"lm-{stream}-{method}-{seed}.json"
+ 
+ 
++def resolve_model_revision(model: str, requested_revision: str | None = None) -> str:
++    """Resolve one immutable HF snapshot before any arm starts."""
++    from huggingface_hub import snapshot_download
++
++    kwargs = {
++        "repo_id": model,
++        "revision": requested_revision or "main",
++        "allow_patterns": ["config.json"],
++    }
++    try:
++        snapshot = Path(snapshot_download(**kwargs))
++    except Exception:
++        # A fully cached host should remain usable if Hugging Face is temporarily
++        # unreachable. The cached ref still resolves to an immutable snapshot dir.
++        snapshot = Path(snapshot_download(**kwargs, local_files_only=True))
++    revision = snapshot.name
++    if len(revision) < 12:
++        raise RuntimeError(f"Could not resolve immutable model snapshot from {snapshot}")
++    return revision
++
++
+ def main() -> None:
+     p = argparse.ArgumentParser(
+         description="Run the EXP-001 engineering pilot, derive a count-matched random control, and validate manifests."
+     )
+     p.add_argument("--seed", type=int, default=20260901)
+     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
++    p.add_argument("--model-revision", default=None, help="Optional HF ref/SHA; resolved to one immutable snapshot before the first arm.")
+     p.add_argument("--stream", choices=["retention", "revision"], default="retention")
+     p.add_argument("--eval-cap", type=int, default=4,
+                    help="Pilot evaluation cap. Use a small value for the first engineering run.")
+@@ -34,10 +56,13 @@ def main() -> None:
+     args = p.parse_args()
+ 
+     args.out_dir.mkdir(parents=True, exist_ok=True)
++    resolved_revision = resolve_model_revision(args.model, args.model_revision)
++    print(f"Pinned model snapshot: {args.model}@{resolved_revision}", flush=True)
+     common = [
+         sys.executable, str(ROOT / "scripts" / "run_lm_pals.py"),
+         "--seed", str(args.seed),
+         "--model", args.model,
++        "--model-revision", resolved_revision,
+         "--stream", args.stream,
+         "--eval-cap", str(args.eval_cap),
+     ]
+@@ -78,6 +103,7 @@ def main() -> None:
+         "classification": "ENGINEERING_PILOT",
+         "seed": args.seed,
+         "model": args.model,
++        "model_revision": resolved_revision,
+         "stream": args.stream,
+         "eval_cap": args.eval_cap,
+         "promotion_accepted_segments": accepted,
+diff --git a/scripts/run_lm_pals.py b/scripts/run_lm_pals.py
+index ab30b78..91aa4e4 100755
+--- a/scripts/run_lm_pals.py
++++ b/scripts/run_lm_pals.py
+@@ -448,6 +448,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
+         "config": asdict(cfg),
+         "model": {
+             "name": cfg.model_name,
++            "snapshot_revision": cfg.model_revision,
+             "device": str(model.device),
+             "base_parameters": base_params,
+             "plastic_parameter_capacity": plastic_params,
+@@ -500,6 +501,7 @@ def main() -> None:
+     p.add_argument("--stream", choices=["retention", "revision"], default="retention")
+     p.add_argument("--seed", type=int, default=20260901)
+     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
++    p.add_argument("--model-revision", default=None, help="Immutable Hugging Face snapshot SHA. Required for a validator-clean pilot.")
+     p.add_argument("--eval-cap", type=int, default=None, help="Pilot-only cap on test examples")
+     p.add_argument("--random-commit-segments", default=None, help="Comma-separated segments for matched random control")
+     p.add_argument("--write-step-budget", type=int, default=None,
+@@ -507,7 +509,7 @@ def main() -> None:
+     p.add_argument("--out", type=Path, default=None)
+     args = p.parse_args()
+ 
+-    cfg = LMExperimentConfig(model_name=args.model)
++    cfg = LMExperimentConfig(model_name=args.model, model_revision=args.model_revision)
+     payload = run(
+         args.method, args.seed, cfg,
+         stream=args.stream,
+diff --git a/scripts/validate_runs.py b/scripts/validate_runs.py
+index d98bbd3..30a1b5f 100644
+--- a/scripts/validate_runs.py
++++ b/scripts/validate_runs.py
+@@ -44,6 +44,20 @@ def main() -> None:
+         reasons.append("primary_methods_use_different_source_trees")
+     if len({r.get("model", {}).get("name") for r in comparable}) > 1:
+         reasons.append("primary_methods_use_different_models")
++    snapshot_revisions = {r.get("model", {}).get("snapshot_revision") for r in input_comparable}
++    if None in snapshot_revisions or "" in snapshot_revisions:
++        reasons.append("pilot_model_snapshot_not_pinned")
++    elif len(snapshot_revisions) > 1:
++        reasons.append("pilot_arms_use_different_model_snapshots")
++    elif snapshot_revisions:
++        pinned = next(iter(snapshot_revisions))
++        for r in input_comparable:
++            reported_model = r.get("model", {}).get("model_revision")
++            reported_tokenizer = r.get("model", {}).get("tokenizer_revision")
++            if reported_model and reported_model != pinned:
++                reasons.append(f"reported_model_revision_differs_from_pin:{r.get('method')}")
++            if reported_tokenizer and reported_tokenizer != pinned:
++                reasons.append(f"reported_tokenizer_revision_differs_from_pin:{r.get('method')}")
+     if any(not r.get("model", {}).get("backbone_frozen", False) for r in comparable):
+         reasons.append("backbone_not_frozen")
+     if any(r.get("invalidation_reasons") for r in comparable):
+diff --git a/src/state_promotion/lm.py b/src/state_promotion/lm.py
+index 4465a14..2c60248 100644
+--- a/src/state_promotion/lm.py
++++ b/src/state_promotion/lm.py
+@@ -15,6 +15,7 @@ from .pals import Example
+ @dataclass
+ class LMExperimentConfig:
+     model_name: str = "Qwen/Qwen2.5-0.5B-Instruct"
++    model_revision: str | None = None
+     slow_tokens: int = 4
+     fast_tokens: int = 4
+     latent_decay: float = 0.95
+@@ -199,10 +200,10 @@ def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int
+             device = "cpu"
+ 
+     dtype = torch.float16 if device in {"cuda", "mps"} else torch.float32
+-    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name, use_fast=True)
++    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name, revision=cfg.model_revision, use_fast=True)
+     if tokenizer.pad_token_id is None:
+         tokenizer.pad_token = tokenizer.eos_token
+-    base = AutoModelForCausalLM.from_pretrained(cfg.model_name, torch_dtype=dtype)
++    base = AutoModelForCausalLM.from_pretrained(cfg.model_name, revision=cfg.model_revision, torch_dtype=dtype)
+     base.to(device)
+     base.eval()
+     hidden = int(base.get_input_embeddings().embedding_dim)
+diff --git a/tests/test_pilot_revision_pin.py b/tests/test_pilot_revision_pin.py
+new file mode 100644
+index 0000000..488d9e9
+--- /dev/null
++++ b/tests/test_pilot_revision_pin.py
+@@ -0,0 +1,45 @@
++import importlib.util
++from pathlib import Path
++from types import SimpleNamespace
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++SPEC = importlib.util.spec_from_file_location("run_exp001_pilot", ROOT / "scripts" / "run_exp001_pilot.py")
++MOD = importlib.util.module_from_spec(SPEC)
++SPEC.loader.exec_module(MOD)
++
++
++def test_resolve_model_revision_returns_snapshot_sha(monkeypatch):
++    seen = {}
++    def snapshot_download(**kwargs):
++        seen.update(kwargs)
++        return "/tmp/hf/models--Qwen/snapshots/0123456789abcdef0123456789abcdef01234567"
++    monkeypatch.setitem(sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=snapshot_download))
++    revision = MOD.resolve_model_revision("Qwen/Qwen2.5-0.5B-Instruct")
++    assert revision == "0123456789abcdef0123456789abcdef01234567"
++    assert seen["revision"] == "main"
++    assert seen["allow_patterns"] == ["config.json"]
++
++
++def test_resolve_model_revision_honors_requested_ref(monkeypatch):
++    seen = {}
++    def snapshot_download(**kwargs):
++        seen.update(kwargs)
++        return "/tmp/hf/snapshots/fedcba9876543210fedcba9876543210fedcba98"
++    monkeypatch.setitem(sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=snapshot_download))
++    revision = MOD.resolve_model_revision("Qwen/Qwen2.5-0.5B-Instruct", "candidate-ref")
++    assert revision == "fedcba9876543210fedcba9876543210fedcba98"
++    assert seen["revision"] == "candidate-ref"
++
++
++def test_resolve_model_revision_falls_back_to_cached_snapshot(monkeypatch):
++    calls = []
++    def snapshot_download(**kwargs):
++        calls.append(kwargs)
++        if not kwargs.get("local_files_only"):
++            raise OSError("offline")
++        return "/tmp/hf/snapshots/1111111111111111111111111111111111111111"
++    monkeypatch.setitem(sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=snapshot_download))
++    revision = MOD.resolve_model_revision("Qwen/Qwen2.5-0.5B-Instruct")
++    assert revision == "1111111111111111111111111111111111111111"
++    assert calls[-1]["local_files_only"] is True
+diff --git a/tests/test_validator_batch_audit.py b/tests/test_validator_batch_audit.py
+index 18ca97b..6994085 100644
+--- a/tests/test_validator_batch_audit.py
++++ b/tests/test_validator_batch_audit.py
+@@ -18,6 +18,9 @@ def run_manifest(method: str, *, online_hash: str = "online-same", eval_hash: st
+         "source_tree_sha256": "tree-same",
+         "model": {
+             "name": "Qwen/Qwen2.5-0.5B-Instruct",
++            "snapshot_revision": "a" * 40,
++            "model_revision": "a" * 40,
++            "tokenizer_revision": "a" * 40,
+             "backbone_frozen": True,
+             "plastic_parameter_capacity": 200,
+             "latent_state_enabled": latent,
