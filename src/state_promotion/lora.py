@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+import random
 from typing import Iterable, Mapping, Sequence
 
 import torch
@@ -448,3 +449,168 @@ def load_lora_model(
         seed=seed,
     ).to(device)
     return model, tokenizer, device_report
+
+
+def consolidate_slow_lora(
+    model: LoRAStateLM,
+    tokenizer,
+    replay_examples: Sequence,
+    budget,
+    cfg,
+    *,
+    use_latent: bool,
+    steps: int | None = None,
+) -> None:
+    """Optimize slow LoRA under the same latent mode used by candidate scoring."""
+    from .lm import supervised_step
+
+    params = model.set_trainable("slow")
+    optimizer = torch.optim.AdamW(params, lr=cfg.consolidation_lr)
+    if not replay_examples:
+        return
+    rng = random.Random(7729 + budget.optimizer_steps)
+    planned_steps = cfg.consolidation_steps if steps is None else steps
+    for _ in range(planned_steps):
+        if not budget.may_write(params):
+            break
+        batch = [
+            rng.choice(replay_examples)
+            for _ in range(min(cfg.consolidation_batch, len(replay_examples)))
+        ]
+        supervised_step(
+            model,
+            tokenizer,
+            batch,
+            optimizer,
+            budget,
+            use_fast=False,
+            use_slow=True,
+            use_latent=use_latent,
+            update_latent=False,
+            replay_examples=len(batch),
+        )
+
+
+def guarded_promotion_lora(
+    model: LoRAStateLM,
+    tokenizer,
+    *,
+    current_probe: Sequence,
+    protected_probe: Sequence,
+    candidates: Sequence[str],
+    replay,
+    budget,
+    cfg,
+    use_latent: bool = True,
+    rollback_on_retention: bool = True,
+    consolidation_steps: int | None = None,
+    consolidation_examples: Sequence | None = None,
+) -> tuple[bool, dict[str, float]]:
+    """LoRA promotion path with explicit latent-mode consistency and rollback."""
+    from .lm import multiple_choice_accuracy
+
+    if any(ex.split != "train" for ex in current_probe):
+        raise ValueError("current promotion probe contains non-training examples")
+    if any(ex.split != "train" for ex in protected_probe):
+        raise ValueError("protected promotion probe contains non-training examples")
+
+    current_with_fast = multiple_choice_accuracy(
+        model,
+        tokenizer,
+        current_probe,
+        candidates,
+        use_fast=True,
+        use_slow=True,
+        use_latent=use_latent,
+        decision_budget=budget,
+    )
+    current_slow_only = multiple_choice_accuracy(
+        model,
+        tokenizer,
+        current_probe,
+        candidates,
+        use_fast=False,
+        use_slow=True,
+        use_latent=use_latent,
+        decision_budget=budget,
+    )
+    fast_gain = current_with_fast - current_slow_only
+    evidence = {
+        "current_with_fast": current_with_fast,
+        "current_slow_only": current_slow_only,
+        "fast_gain": fast_gain,
+    }
+    if current_with_fast < cfg.promotion_min_current_acc or fast_gain < cfg.promotion_min_fast_gain:
+        evidence["gate"] = 0.0
+        return False, evidence
+
+    retention_before = (
+        multiple_choice_accuracy(
+            model,
+            tokenizer,
+            protected_probe,
+            candidates,
+            use_fast=True,
+            use_slow=True,
+            use_latent=use_latent,
+            decision_budget=budget,
+        )
+        if protected_probe
+        else 1.0
+    )
+    snapshot = model.snapshot_plastic_state()
+    evidence_examples = replay.items if consolidation_examples is None else consolidation_examples
+    consolidate_slow_lora(
+        model,
+        tokenizer,
+        evidence_examples,
+        budget,
+        cfg,
+        use_latent=use_latent,
+        steps=consolidation_steps,
+    )
+    current_after = multiple_choice_accuracy(
+        model,
+        tokenizer,
+        current_probe,
+        candidates,
+        use_fast=False,
+        use_slow=True,
+        use_latent=use_latent,
+        decision_budget=budget,
+    )
+    retention_after = (
+        multiple_choice_accuracy(
+            model,
+            tokenizer,
+            protected_probe,
+            candidates,
+            use_fast=False,
+            use_slow=True,
+            use_latent=use_latent,
+            decision_budget=budget,
+        )
+        if protected_probe
+        else 1.0
+    )
+    retention_drop = retention_before - retention_after
+    evidence.update(
+        {
+            "retention_before": retention_before,
+            "retention_after": retention_after,
+            "retention_drop": retention_drop,
+            "current_after": current_after,
+        }
+    )
+
+    if rollback_on_retention and (
+        retention_drop > cfg.promotion_max_retention_drop
+        or current_after < cfg.promotion_min_current_acc
+    ):
+        model.restore_plastic_state(snapshot)
+        evidence["gate"] = -1.0
+        return False, evidence
+
+    model.reset_fast()
+    evidence["gate"] = 1.0
+    return True, evidence
