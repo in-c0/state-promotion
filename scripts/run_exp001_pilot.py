@@ -49,6 +49,8 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=20260901)
     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
     p.add_argument("--model-revision", default=None, help="Optional HF ref/SHA; resolved to one immutable snapshot before the first arm.")
+    p.add_argument("--device", default=None,
+                   help="Force a device (cpu/mps/cuda) for every arm. Default auto-selects and numerically verifies any accelerator.")
     p.add_argument("--stream", choices=["retention", "revision"], default="retention")
     p.add_argument("--eval-cap", type=int, default=4,
                    help="Pilot evaluation cap. Use a small value for the first engineering run.")
@@ -66,6 +68,8 @@ def main() -> None:
         "--stream", args.stream,
         "--eval-cap", str(args.eval_cap),
     ]
+    if args.device:
+        common += ["--device", args.device]
 
     for method in PRIMARY:
         out = result_path(args.out_dir, args.stream, method, args.seed)
@@ -104,6 +108,7 @@ def main() -> None:
         "seed": args.seed,
         "model": args.model,
         "model_revision": resolved_revision,
+        "device": args.device or "auto",
         "stream": args.stream,
         "eval_cap": args.eval_cap,
         "promotion_accepted_segments": accepted,

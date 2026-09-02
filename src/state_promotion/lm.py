@@ -28,6 +28,7 @@ class LMExperimentConfig:
     promotion_min_fast_gain: float = 0.08
     promotion_min_current_acc: float = 0.45
     promotion_max_retention_drop: float = 0.03
+    device_probe_tolerance: float = 0.05
 
 
 @dataclass
@@ -188,7 +189,70 @@ class PromptStateLM(nn.Module):
             self.latent.copy_(state["latent"])
 
 
-def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int = 1701) -> tuple[PromptStateLM, object]:
+class DeviceNumericsError(RuntimeError):
+    """Raised when an accelerator disagrees with CPU on the loaded model."""
+
+
+def verify_device_numerics(base, tokenizer, device: str, *, tolerance: float, repeats: int = 3) -> dict:
+    """Refuse an accelerator that returns wrong numbers for this model.
+
+    Observed on an Apple M1 Max (macOS 15.6, torch 2.8 and 2.13, transformers
+    4.56 and 5.16, both eager and sdpa attention): the Qwen2 forward pass on MPS
+    reports a spurious Metal ``kIOGPUCommandBufferCallbackErrorOutOfMemory`` at
+    ~2.7 GB against a ~23 GB budget, zero-fills whole layer outputs, and returns
+    a plausible-looking but wrong loss with no Python exception. Elementwise and
+    matmul kernels pass, so a generic op probe does not catch it; the check has
+    to run the loaded model itself.
+
+    Scope, deliberately stated because it bounds what this can promise: the
+    failure is reliable in float32 but only intermittent in float16, so a
+    load-time probe catches the hard case and cannot certify a device that
+    corrupts partway through a run. It is a floor, not a guarantee. Treat a
+    passing probe as "not obviously broken" and still pin an explicitly
+    recorded device for any run whose numbers are meant to be interpreted.
+
+    A wrong device invalidates every downstream number, so this raises rather
+    than quietly falling back: the operator chooses the replacement device and
+    the choice is recorded in the manifest.
+    """
+    probe = tokenizer("Numerical device probe for continual adaptation.", return_tensors="pt")
+    ids = probe["input_ids"]
+
+    reference_device = next(base.parameters()).device
+    with torch.no_grad():
+        base.to("cpu")
+        cpu_loss = float(base(input_ids=ids, labels=ids).loss)
+        base.to(reference_device)
+        device_losses = [
+            float(base(input_ids=ids.to(device), labels=ids.to(device)).loss)
+            for _ in range(repeats)
+        ]
+
+    finite = all(v == v and abs(v) != float("inf") for v in device_losses)
+    deterministic = finite and max(device_losses) - min(device_losses) <= tolerance
+    accurate = finite and all(abs(v - cpu_loss) <= tolerance for v in device_losses)
+    report = {
+        "device": device,
+        "cpu_reference_loss": cpu_loss,
+        "device_losses": device_losses,
+        "tolerance": tolerance,
+        "finite": finite,
+        "deterministic": deterministic,
+        "matches_cpu": accurate,
+        "verified": bool(finite and deterministic and accurate),
+    }
+    if not report["verified"]:
+        raise DeviceNumericsError(
+            f"Device {device!r} failed the numerical self-check for {getattr(base, 'name_or_path', 'model')}: "
+            f"cpu={cpu_loss:.6f} device={device_losses} tolerance={tolerance}. "
+            "Refusing to produce results on a device that disagrees with CPU. "
+            "Re-run with an explicit --device (for example --device cpu)."
+        )
+    return report
+
+
+def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int = 1701,
+               verify_numerics: bool = True) -> tuple[PromptStateLM, object, dict]:
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     if device is None:
@@ -206,9 +270,13 @@ def load_model(cfg: LMExperimentConfig, device: str | None = None, *, seed: int 
     base = AutoModelForCausalLM.from_pretrained(cfg.model_name, revision=cfg.model_revision, torch_dtype=dtype)
     base.to(device)
     base.eval()
+    device_report = {"device": device, "verified": None, "checked": False}
+    if verify_numerics and device != "cpu":
+        device_report = verify_device_numerics(base, tokenizer, device, tolerance=cfg.device_probe_tolerance)
+        device_report["checked"] = True
     hidden = int(base.get_input_embeddings().embedding_dim)
     model = PromptStateLM(base, hidden, cfg, seed=seed).to(device)
-    return model, tokenizer
+    return model, tokenizer, device_report
 
 
 def encode_example(tokenizer, ex: Example) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:

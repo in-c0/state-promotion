@@ -268,7 +268,7 @@ def revision_metrics(model, tokenizer, all_examples: list[Example], candidates: 
 
 def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "retention",
         eval_cap: int | None = None, random_commit_segments: set[int] | None = None,
-        write_step_budget: int | None = None) -> dict:
+        write_step_budget: int | None = None, device: str | None = None) -> dict:
     if stream == "retention":
         examples, candidates = generate_retention_stream(seed)
     elif stream == "revision":
@@ -279,7 +279,7 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
     segments = group(examples)
     model_init_seed = seed + 1701
     torch.manual_seed(model_init_seed)
-    model, tokenizer = load_model(cfg, seed=model_init_seed)
+    model, tokenizer, device_report = load_model(cfg, device=device, seed=model_init_seed)
     replay = ReplayStore(cfg.replay_capacity, seed + 42)
     budget = BudgetCounter()
     total_train_events = sum(len(v["train"]) for v in segments.values())
@@ -450,6 +450,8 @@ def run(method: str, seed: int, cfg: LMExperimentConfig, *, stream: str = "reten
             "name": cfg.model_name,
             "snapshot_revision": cfg.model_revision,
             "device": str(model.device),
+            "device_requested": device or "auto",
+            "device_numerics_check": device_report,
             "base_parameters": base_params,
             "plastic_parameter_capacity": plastic_params,
             "backbone_frozen": frozen_backbone,
@@ -502,6 +504,8 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=20260901)
     p.add_argument("--model", default="Qwen/Qwen2.5-0.5B-Instruct")
     p.add_argument("--model-revision", default=None, help="Immutable Hugging Face snapshot SHA. Required for a validator-clean pilot.")
+    p.add_argument("--device", default=None,
+                   help="Force a device (cpu/mps/cuda). Default auto-selects and numerically verifies any accelerator.")
     p.add_argument("--eval-cap", type=int, default=None, help="Pilot-only cap on test examples")
     p.add_argument("--random-commit-segments", default=None, help="Comma-separated segments for matched random control")
     p.add_argument("--write-step-budget", type=int, default=None,
@@ -513,6 +517,7 @@ def main() -> None:
     payload = run(
         args.method, args.seed, cfg,
         stream=args.stream,
+        device=args.device,
         eval_cap=args.eval_cap,
         random_commit_segments=parse_segments(args.random_commit_segments),
         write_step_budget=args.write_step_budget,
