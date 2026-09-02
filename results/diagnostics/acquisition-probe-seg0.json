@@ -1,0 +1,60 @@
+{
+  "note": "arm-agnostic acquisition diagnostic, not a protocol run",
+  "chance": 0.16666666666666666,
+  "config": {
+    "online_lr": 0.005,
+    "fast_tokens": 4,
+    "slow_tokens": 4,
+    "plastic_elements": 7168
+  },
+  "trajectory": [
+    {
+      "epoch": 0,
+      "steps": 0,
+      "test": 0.0,
+      "train": 0.0
+    },
+    {
+      "epoch": 1,
+      "steps": 48,
+      "mean_loss": 3.704197241924703,
+      "test": 0.16666666666666666,
+      "train": 0.16666666666666666
+    },
+    {
+      "epoch": 2,
+      "steps": 96,
+      "mean_loss": 3.196781753872832,
+      "test": 0.3333333333333333,
+      "train": 0.3333333333333333
+    },
+    {
+      "epoch": 3,
+      "steps": 144,
+      "mean_loss": 2.835154118326803,
+      "test": 0.3333333333333333,
+      "train": 0.3333333333333333
+    },
+    {
+      "epoch": 4,
+      "steps": 192,
+      "mean_loss": 1.9723559447253745,
+      "test": 0.5,
+      "train": 0.5
+    },
+    {
+      "epoch": 5,
+      "steps": 240,
+      "mean_loss": 1.4283230217794578,
+      "test": 0.16666666666666666,
+      "train": 0.16666666666666666
+    },
+    {
+      "epoch": 6,
+      "steps": 288,
+      "mean_loss": 1.6293055824935436,
+      "test": 0.16666666666666666,
+      "train": 0.16666666666666666
+    }
+  ]
+}

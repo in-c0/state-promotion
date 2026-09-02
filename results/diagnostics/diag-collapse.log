@@ -1,0 +1,11 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3166.04it/s]
+epoch 0: correct 0/6 | distinct predictions 4 | {'VEFEN': 1, 'TADUL': 3, 'TAQEN': 1, 'VEPAX': 1}
+epoch 1: correct 1/6 | distinct predictions 4 | {'VEPAX': 3, 'TADUL': 1, 'TAQEN': 1, 'SUDUL': 1}
+epoch 2: correct 2/6 | distinct predictions 2 | {'VEFEN': 4, 'TAQEN': 2}
+epoch 3: correct 2/6 | distinct predictions 2 | {'TAQEN': 2, 'SUMOS': 4}
+epoch 4: correct 3/6 | distinct predictions 3 | {'VEFEN': 3, 'SUMOS': 2, 'TAQEN': 1}
+epoch 5: correct 1/6 | distinct predictions 2 | {'TAQEN': 4, 'SUMOS': 2}
+epoch 6: correct 1/6 | distinct predictions 1 | {'VEFEN': 6}
+
+final per-mapping:

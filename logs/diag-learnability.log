@@ -1,0 +1,15 @@
+segment 0: 48 train (6 mappings x 8 repeats), 12 test, chance=0.167
+config: online_lr=0.005 fast_tokens=4 slow_tokens=4
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3033.82it/s]
+plastic capacity: 7168 elements
+
+epoch 0 (before any update): test=0.000 train=0.000
+epoch 1 (48 steps): loss=3.7042 test=0.167 train=0.167
+epoch 2 (96 steps): loss=3.1968 test=0.333 train=0.333
+epoch 3 (144 steps): loss=2.8352 test=0.333 train=0.333
+epoch 4 (192 steps): loss=1.9724 test=0.500 train=0.500
+epoch 5 (240 steps): loss=1.4283 test=0.167 train=0.167
+epoch 6 (288 steps): loss=1.6293 test=0.167 train=0.167
+
+wrote results/diagnostics/acquisition-probe-seg0.json

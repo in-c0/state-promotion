@@ -3,8 +3,8 @@
   "method": "sequential",
   "stream": "retention",
   "seed": 20260901,
-  "git_sha": "808fc722519e0bca445e111120e461ba247c7033",
-  "source_tree_sha256": "2679a773e0c2951e0d7e990c2decc63c836ed2d33ea1b3901dafd6558bd1cca6",
+  "git_sha": "c7015d1ac93478ec669cbbfdc1b7d1ce2cd10a13",
+  "source_tree_sha256": "bc89fea9bc1d9cc91f59a3993494312c73ecd2e1f3c5e967d576bdc930e78f49",
   "config": {
     "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
     "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
@@ -42,10 +42,10 @@
     "write_unit_parameters": 3584
   },
   "metrics": {
-    "final_average": 0.4166666666666667,
-    "average_forgetting": 0.2,
-    "average_plasticity": 0.25,
-    "retention_auc": 0.14444444444444446
+    "final_average": 0.3611111111111111,
+    "average_forgetting": 0.03333333333333333,
+    "average_plasticity": 0.27777777777777773,
+    "retention_auc": 0.18518518518518515
   },
   "budget": {
     "optimizer_steps": 288,
@@ -68,11 +68,11 @@
     "estimated_decision_flops_frozen_backbone": 0,
     "flop_estimate_note": "Coarse 4*N*tokens estimate for forward plus input-gradient backprop through a frozen transformer; report as an order-of-magnitude proxy, not hardware FLOPs.",
     "decision_flop_estimate_note": "Coarse 2*N*tokens estimate for no-grad promotion-gate forward passes. These are decision-time inference costs, not post-hoc evaluation costs.",
-    "wall_seconds": 165.10178212500068
+    "wall_seconds": 309.7125661660002
   },
   "matrix": [
     [
-      0.0,
+      0.16666666666666666,
       NaN,
       NaN,
       NaN,
@@ -81,43 +81,43 @@
     ],
     [
       0.0,
-      0.0,
+      0.16666666666666666,
       NaN,
       NaN,
       NaN,
       NaN
     ],
     [
-      0.0,
-      0.0,
-      0.0,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.16666666666666666,
       NaN,
       NaN,
       NaN
     ],
     [
-      0.5,
-      0.0,
-      0.5,
-      0.0,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.16666666666666666,
       NaN,
       NaN
     ],
     [
       0.0,
-      0.5,
-      0.0,
-      0.0,
-      0.5,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.3333333333333333,
       NaN
     ],
     [
-      0.0,
+      0.16666666666666666,
       0.5,
       0.0,
-      0.0,
-      1.0,
-      1.0
+      0.3333333333333333,
+      0.5,
+      0.6666666666666666
     ]
   ],
   "revision_trajectory": [],

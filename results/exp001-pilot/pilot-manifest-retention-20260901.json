@@ -5,7 +5,7 @@
   "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
   "device": "cpu",
   "stream": "retention",
-  "eval_cap": 4,
+  "eval_cap": 12,
   "promotion_accepted_segments": [],
   "matched_random_segments": [],
   "validator_return_code": 0,
