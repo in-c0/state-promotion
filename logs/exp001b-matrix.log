@@ -1,0 +1,160 @@
+[matrix] B3 frozen at k=3, slow_lr=0.003
+[matrix] b0_frozen seed=20260901
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 2302.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2502.65it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5370.43it/s]
+    b0_frozen diag=0.139 forget=0.000 auc=0.136 final=0.139 commits=0 writes=0/77856768 182s
+[matrix] b0_frozen seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 1910.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2182.17it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5330.84it/s]
+    b0_frozen diag=0.167 forget=0.000 auc=0.125 final=0.167 commits=0 writes=0/77856768 203s
+[matrix] b0_frozen seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 1880.70it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2150.49it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4857.89it/s]
+    b0_frozen diag=0.139 forget=0.000 auc=0.176 final=0.139 commits=0 writes=0/77856768 185s
+[matrix] b1_sequential seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 190/290 [00:00<00:00, 1886.81it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2128.43it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5434.44it/s]
+    b1_sequential diag=0.944 forget=0.533 auc=0.495 final=0.500 commits=0 writes=77856768/77856768 242s
+[matrix] b1_sequential seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▊    | 170/290 [00:00<00:00, 1699.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2018.83it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5452.81it/s]
+    b1_sequential diag=0.972 forget=0.767 auc=0.493 final=0.333 commits=0 writes=77856768/77856768 295s
+[matrix] b1_sequential seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 1946.24it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2169.09it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5035.18it/s]
+    b1_sequential diag=0.917 forget=0.733 auc=0.475 final=0.306 commits=0 writes=77856768/77856768 289s
+[matrix] b2_replay seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1700.39it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1957.75it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5025.53it/s]
+    b2_replay diag=0.833 forget=0.333 auc=0.601 final=0.556 commits=0 writes=77856768/77856768 359s
+[matrix] b2_replay seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 1713.48it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1668.21it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4853.40it/s]
+    b2_replay diag=0.861 forget=0.533 auc=0.595 final=0.444 commits=0 writes=77856768/77856768 413s
+[matrix] b2_replay seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 148/290 [00:00<00:00, 1478.71it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1917.57it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4854.52it/s]
+    b2_replay diag=0.778 forget=0.333 auc=0.638 final=0.500 commits=0 writes=77856768/77856768 393s
+[matrix] b3_fixed seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  39%|███▊      | 112/290 [00:00<00:00, 1101.46it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1736.94it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5295.84it/s]
+    b3_fixed diag=0.556 forget=0.300 auc=0.369 final=0.333 commits=2 writes=77856768/77856768 333s
+[matrix] b3_fixed seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 1411.01it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1724.91it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5734.62it/s]
+    b3_fixed diag=0.528 forget=0.433 auc=0.340 final=0.167 commits=2 writes=77856768/77856768 363s
+[matrix] b3_fixed seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 1579.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1788.94it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5263.94it/s]
+    b3_fixed diag=0.556 forget=0.467 auc=0.333 final=0.167 commits=2 writes=77856768/77856768 403s
+[matrix] b5_promotion seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  61%|██████    | 177/290 [00:00<00:00, 1730.31it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1863.71it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5353.97it/s]
+    b5_promotion diag=0.694 forget=0.267 auc=0.388 final=0.472 commits=0 writes=71368704/77856768 592s
+[matrix] b5_promotion seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:35,  8.21it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1552.11it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5171.77it/s]
+    b5_promotion diag=0.806 forget=0.600 auc=0.388 final=0.306 commits=0 writes=77856768/77856768 600s
+[matrix] b5_promotion seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  47%|████▋     | 135/290 [00:00<00:00, 1300.31it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1606.80it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5102.56it/s]
+    b5_promotion diag=0.722 forget=0.533 auc=0.409 final=0.278 commits=0 writes=77856768/77856768 551s
+[matrix] b4_random seed=20260901 matched to B5 commits=[] steps={}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 169/290 [00:00<00:00, 1689.86it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1738.14it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5375.93it/s]
+    b4_random diag=0.694 forget=0.267 auc=0.388 final=0.472 commits=0 writes=38928384/77856768 327s
+[matrix] b4_random seed=20260902 matched to B5 commits=[] steps={}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:35,  8.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1599.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4921.74it/s]
+    b4_random diag=0.806 forget=0.600 auc=0.388 final=0.306 commits=0 writes=38928384/77856768 307s
+[matrix] b4_random seed=20260903 matched to B5 commits=[] steps={}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▊    | 170/290 [00:00<00:00, 1696.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1990.49it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4332.96it/s]
+    b4_random diag=0.722 forget=0.533 auc=0.409 final=0.278 commits=0 writes=38928384/77856768 274s
+[curve] b2_replay batch=2 seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 1426.90it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1784.04it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5388.37it/s]
+    b2_replay@b2 diag=0.806 forget=0.500 auc=0.732 final=0.444 commits=0 writes=77856768/77856768 423s
+[curve] b3_fixed batch=2 seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 1569.74it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1732.25it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5643.57it/s]
+    b3_fixed@b2 diag=0.611 forget=0.200 auc=0.371 final=0.444 commits=2 writes=77856768/77856768 461s
+[curve] b2_replay batch=2 seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:32,  8.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1689.83it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5086.47it/s]
+    b2_replay@b2 diag=0.972 forget=0.333 auc=0.902 final=0.694 commits=0 writes=77856768/77856768 448s
+[curve] b3_fixed batch=2 seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  52%|█████▏    | 150/290 [00:00<00:00, 1496.20it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1872.70it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5030.35it/s]
+    b3_fixed@b2 diag=0.444 forget=0.267 auc=0.358 final=0.222 commits=2 writes=77856768/77856768 485s
+[curve] b2_replay batch=2 seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 1587.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1612.03it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5269.23it/s]
+    b2_replay@b2 diag=0.861 forget=0.533 auc=0.794 final=0.444 commits=0 writes=77856768/77856768 453s
+[curve] b3_fixed batch=2 seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|██████    | 175/290 [00:00<00:00, 1749.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2010.62it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5416.20it/s]
+    b3_fixed@b2 diag=0.667 forget=0.467 auc=0.393 final=0.278 commits=2 writes=77856768/77856768 449s
+[curve] b2_replay batch=4 seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 1896.16it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2163.60it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4859.02it/s]
+    b2_replay@b4 diag=0.972 forget=0.033 auc=0.935 final=0.972 commits=0 writes=77856768/77856768 592s
+[curve] b3_fixed batch=4 seed=20260901
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  49%|████▉     | 143/290 [00:00<00:00, 1397.78it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1864.59it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5269.23it/s]
+    b3_fixed@b4 diag=0.722 forget=0.200 auc=0.488 final=0.694 commits=2 writes=77856768/77856768 528s
+[curve] b2_replay batch=4 seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 148/290 [00:00<00:00, 1469.42it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1870.57it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5321.37it/s]
+    b2_replay@b4 diag=0.972 forget=0.033 auc=0.940 final=0.972 commits=0 writes=77856768/77856768 591s
+[curve] b3_fixed batch=4 seed=20260902
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 1584.58it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1941.86it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5143.86it/s]
+    b3_fixed@b4 diag=0.722 forget=0.267 auc=0.569 final=0.667 commits=2 writes=77856768/77856768 665s
+[curve] b2_replay batch=4 seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1669.99it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2001.93it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5370.43it/s]
+    b2_replay@b4 diag=0.944 forget=0.067 auc=0.949 final=0.889 commits=0 writes=77856768/77856768 573s
+[curve] b3_fixed batch=4 seed=20260903
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1573.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1772.65it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5495.68it/s]
+    b3_fixed@b4 diag=0.722 forget=0.133 auc=0.520 final=0.667 commits=2 writes=77856768/77856768 638s
+{
+  "b0_frozen": {
+    "mean_average_forgetting": 0.0,
+    "mean_diagonal": 0.1481,
+    "mean_final_average": 0.1481,
+    "mean_retention_auc": 0.1455
+  },
+  "b1_sequential": {
+    "mean_average_forgetting": 0.6778,
+    "mean_diagonal": 0.9444,
+    "mean_final_average": 0.3796,
+    "mean_retention_auc": 0.4877
+  },
+  "b2_replay": {
+    "mean_average_forgetting": 0.4,
+    "mean_diagonal": 0.8241,
+    "mean_final_average": 0.5,
+    "mean_retention_auc": 0.6114
+  },
+  "b3_fixed": {
+    "mean_average_forgetting": 0.4,
+    "mean_diagonal": 0.5463,
+    "mean_final_average": 0.2222,
+    "mean_retention_auc": 0.3475
+  },
+  "b4_random": {
+    "mean_average_forgetting": 0.4667,
+    "mean_diagonal": 0.7407,
+    "mean_final_average": 0.3519,
+    "mean_retention_auc": 0.3954
+  },
+  "b5_promotion": {
+    "mean_average_forgetting": 0.4667,
+    "mean_diagonal": 0.7407,
+    "mean_final_average": 0.3519,
+    "mean_retention_auc": 0.3954
+  }
+}
