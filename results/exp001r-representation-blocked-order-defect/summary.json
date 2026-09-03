@@ -1,0 +1,124 @@
+{
+  "cells": [
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.16666666666666666,
+        0.3333333333333333
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.27777777777777773,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.16666666666666666
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.27777777777777773,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.16666666666666666,
+        0.16666666666666666
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.2222222222222222,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.27777777777777773,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.5,
+        0.16666666666666666
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.3333333333333333,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.16666666666666666,
+        0.16666666666666666
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.16666666666666666,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.5,
+        0.5
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.4444444444444444,
+      "passes": false,
+      "rank": 4,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.16666666666666666,
+        0.16666666666666666
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.16666666666666666,
+      "passes": false,
+      "rank": 4,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.16666666666666666,
+        0.16666666666666666
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.16666666666666666,
+      "passes": false,
+      "rank": 4,
+      "worst_seed_accuracy": 0.16666666666666666
+    }
+  ],
+  "next_gate_allowed": false,
+  "pass_rule": {
+    "finite_required": true,
+    "mean_accuracy_min": 0.8333333333333334,
+    "per_seed_accuracy_min": 0.6666666666666666
+  },
+  "protocol": "EXP-001R-representation-sufficiency-v1",
+  "selected": null,
+  "selection_rule": "smallest passing rank; within rank highest worst-seed acquisition; exact ties prefer smaller LR",
+  "status": "DEVELOPMENT_ONLY",
+  "superseded": true,
+  "superseded_reason": "Training used PALS generation order (blocked: 8 consecutive copies per mapping). The protocol runner shuffles each segment (run_lm_pals.py). Preserved as evidence of the blocked-order defect; not a representation-capacity result. See EXP-001R-AMENDMENT-G."
+}
