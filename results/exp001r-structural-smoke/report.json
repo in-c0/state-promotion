@@ -1,0 +1,30 @@
+{
+  "backbone_byte_identical": true,
+  "backbone_sha256_after": "f9a7b2d36b1b313af287715f3187e0a5b979a3bd0b29367c6788d48da4f719ed",
+  "backbone_sha256_before": "f9a7b2d36b1b313af287715f3187e0a5b979a3bd0b29367c6788d48da4f719ed",
+  "device": "cpu",
+  "device_numerics": {
+    "checked": false,
+    "device": "cpu",
+    "verified": null
+  },
+  "expected_target_module_count": 48,
+  "fast_parameter_count": 67584,
+  "git_sha": "47d2576e649b63ea3b611ddac885b29e2aaf4803",
+  "heldout_examples_scored": 0,
+  "loaded_model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "loaded_tokenizer_revision": null,
+  "lr": 0.0003,
+  "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+  "one_training_step_loss": 11.374128341674805,
+  "optimizer_steps": 1,
+  "parameter_write_units": 67584,
+  "protocol": "EXP-001R-real-Qwen-structural-smoke-v1",
+  "rank": 1,
+  "requested_model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "seed": 20260901,
+  "slow_parameter_count": 67584,
+  "status": "DEVELOPMENT_ONLY_NO_HELDOUT_SCORE",
+  "target_module_count": 48,
+  "tokens_processed": 35
+}

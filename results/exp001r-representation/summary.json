@@ -1,0 +1,133 @@
+{
+  "cells": [
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.27777777777777773,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.6666666666666666,
+        0.5
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.5,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        1.0,
+        0.3333333333333333,
+        1.0
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.7777777777777778,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.4444444444444444,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        0.5,
+        0.6666666666666666
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.6666666666666666,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.5
+    },
+    {
+      "accuracies": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 1.0,
+      "passes": true,
+      "rank": 2,
+      "worst_seed_accuracy": 1.0
+    },
+    {
+      "accuracies": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.5,
+      "passes": false,
+      "rank": 4,
+      "worst_seed_accuracy": 0.5
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        1.0,
+        1.0
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.9444444444444445,
+      "passes": true,
+      "rank": 4,
+      "worst_seed_accuracy": 0.8333333333333334
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        0.8333333333333334,
+        0.8333333333333334
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.8333333333333334,
+      "passes": true,
+      "rank": 4,
+      "worst_seed_accuracy": 0.8333333333333334
+    }
+  ],
+  "next_gate_allowed": true,
+  "pass_rule": {
+    "finite_required": true,
+    "mean_accuracy_min": 0.8333333333333334,
+    "per_seed_accuracy_min": 0.6666666666666666
+  },
+  "protocol": "EXP-001R-representation-sufficiency-v1",
+  "selected": {
+    "accuracies": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "lr": 0.003,
+    "mean_accuracy": 1.0,
+    "passes": true,
+    "rank": 2,
+    "worst_seed_accuracy": 1.0
+  },
+  "selection_rule": "smallest passing rank; within rank highest worst-seed acquisition; exact ties prefer smaller LR",
+  "status": "DEVELOPMENT_ONLY"
+}

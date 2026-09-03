@@ -1,0 +1,28 @@
+{
+  "acquisition_pass": true,
+  "acquisition_rule": ">= 0.667 mean diagonal/new-task acquisition",
+  "anti_ceiling_pass": true,
+  "anti_ceiling_rule": "sequential provides a counterexample to all-adaptive-arms >0.95 before segment 3",
+  "both_gates_pass": true,
+  "disposition": "resume_exp001_phase_b_multi_arm_development",
+  "interference_pass": true,
+  "interference_rule": ">= 0.10 average forgetting in at least one development seed",
+  "mean_diagonal_acquisition": 0.9444444444444445,
+  "numerics_and_freeze_pass": true,
+  "protocol": "EXP-001R-sequential-interference-gate-v1",
+  "representation_protocol": "EXP-001R-representation-sufficiency-v1",
+  "seed_average_forgetting": [
+    0.4444444444444445,
+    0.638888888888889,
+    0.6111111111111112
+  ],
+  "seed_mean_diagonal_acquisition": [
+    0.9444444444444445,
+    0.9722222222222222,
+    0.9166666666666666
+  ],
+  "selected_fast_rank": 2,
+  "selected_lr": 0.003,
+  "single_adapter_effective_rank": 4,
+  "status": "DEVELOPMENT_ONLY"
+}

@@ -1,0 +1,188 @@
+[EXP-001R] seed=20260901 rank=1 lr=0.0003
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  83%|████████▎ | 241/290 [00:00<00:00, 2353.01it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2442.18it/s]
+[EXP-001R] seed=20260902 rank=1 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1776.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1975.06it/s]
+[EXP-001R] seed=20260903 rank=1 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  57%|█████▋    | 166/290 [00:00<00:00, 1658.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1932.36it/s]
+[EXP-001R] seed=20260901 rank=1 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  54%|█████▍    | 157/290 [00:00<00:00, 1529.16it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1840.61it/s]
+[EXP-001R] seed=20260902 rank=1 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 1949.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2159.53it/s]
+[EXP-001R] seed=20260903 rank=1 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  64%|██████▍   | 187/290 [00:00<00:00, 1844.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2077.10it/s]
+[EXP-001R] seed=20260901 rank=1 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 1849.28it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2094.09it/s]
+[EXP-001R] seed=20260902 rank=1 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<03:04,  1.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 403.23it/s]
+[EXP-001R] seed=20260903 rank=1 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  69%|██████▉   | 200/290 [00:00<00:00, 1991.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2212.06it/s]
+[EXP-001R] seed=20260901 rank=2 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1769.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1958.35it/s]
+[EXP-001R] seed=20260902 rank=2 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 1553.14it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1891.26it/s]
+[EXP-001R] seed=20260903 rank=2 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 1704.91it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2005.78it/s]
+[EXP-001R] seed=20260901 rank=2 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1813.76it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2004.71it/s]
+[EXP-001R] seed=20260902 rank=2 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:29,  9.89it/s]Loading weights:  27%|██▋       | 77/290 [00:00<00:00, 415.72it/s]Loading weights:  47%|████▋     | 135/290 [00:00<00:00, 449.56it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 453.82it/s]Loading weights:  80%|████████  | 233/290 [00:00<00:00, 469.42it/s]Loading weights:  97%|█████████▋| 280/290 [00:00<00:00, 421.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 429.51it/s]
+[EXP-001R] seed=20260903 rank=2 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<05:13,  1.09s/it]Loading weights:  96%|█████████▌| 279/290 [00:01<00:00, 322.39it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 240.94it/s]
+[EXP-001R] seed=20260901 rank=2 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<05:58,  1.24s/it]Loading weights:  92%|█████████▏| 267/290 [00:01<00:00, 268.73it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 201.90it/s]
+[EXP-001R] seed=20260902 rank=2 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<05:11,  1.08s/it]Loading weights:  92%|█████████▏| 267/290 [00:01<00:00, 300.90it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 227.62it/s]
+[EXP-001R] seed=20260903 rank=2 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<06:00,  1.25s/it]Loading weights:  97%|█████████▋| 280/290 [00:01<00:00, 286.26it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 214.54it/s]
+[EXP-001R] seed=20260901 rank=4 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<06:02,  1.25s/it]Loading weights:  96%|█████████▌| 279/290 [00:01<00:00, 276.62it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 208.39it/s]
+[EXP-001R] seed=20260902 rank=4 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<05:22,  1.11s/it]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 241.18it/s]
+[EXP-001R] seed=20260903 rank=4 lr=0.0003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<08:00,  1.66s/it]Loading weights:  96%|█████████▌| 279/290 [00:01<00:00, 213.35it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 160.10it/s]
+[EXP-001R] seed=20260901 rank=4 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<04:42,  1.02it/s]Loading weights:  88%|████████▊ | 255/290 [00:01<00:00, 310.16it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 227.35it/s]
+[EXP-001R] seed=20260902 rank=4 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:34,  8.46it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 1442.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1255.95it/s]
+[EXP-001R] seed=20260903 rank=4 lr=0.001
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 1683.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2009.96it/s]
+[EXP-001R] seed=20260901 rank=4 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:31,  1.91it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 548.96it/s]
+[EXP-001R] seed=20260902 rank=4 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 1549.26it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1765.33it/s]
+[EXP-001R] seed=20260903 rank=4 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  67%|██████▋   | 193/290 [00:00<00:00, 1867.73it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2072.81it/s]
+{
+  "cells": [
+    {
+      "accuracies": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.27777777777777773,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.6666666666666666,
+        0.5
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.5,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        1.0,
+        0.3333333333333333,
+        1.0
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.7777777777777778,
+      "passes": false,
+      "rank": 1,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.4444444444444444,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        0.5,
+        0.6666666666666666
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.6666666666666666,
+      "passes": false,
+      "rank": 2,
+      "worst_seed_accuracy": 0.5
+    },
+    {
+      "accuracies": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 1.0,
+      "passes": true,
+      "rank": 2,
+      "worst_seed_accuracy": 1.0
+    },
+    {
+      "accuracies": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "lr": 0.0003,
+      "mean_accuracy": 0.5,
+      "passes": false,
+      "rank": 4,
+      "worst_seed_accuracy": 0.5
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        1.0,
+        1.0
+      ],
+      "lr": 0.001,
+      "mean_accuracy": 0.9444444444444445,
+      "passes": true,
+      "rank": 4,
+      "worst_seed_accuracy": 0.8333333333333334
+    },
+    {
+      "accuracies": [
+        0.8333333333333334,
+        0.8333333333333334,
+        0.8333333333333334
+      ],
+      "lr": 0.003,
+      "mean_accuracy": 0.8333333333333334,
+      "passes": true,
+      "rank": 4,
+      "worst_seed_accuracy": 0.8333333333333334
+    }
+  ],
+  "next_gate_allowed": true,
+  "pass_rule": {
+    "finite_required": true,
+    "mean_accuracy_min": 0.8333333333333334,
+    "per_seed_accuracy_min": 0.6666666666666666
+  },
+  "protocol": "EXP-001R-representation-sufficiency-v1",
+  "selected": {
+    "accuracies": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "lr": 0.003,
+    "mean_accuracy": 1.0,
+    "passes": true,
+    "rank": 2,
+    "worst_seed_accuracy": 1.0
+  },
+  "selection_rule": "smallest passing rank; within rank highest worst-seed acquisition; exact ties prefer smaller LR",
+  "status": "DEVELOPMENT_ONLY"
+}

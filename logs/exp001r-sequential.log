@@ -1,0 +1,35 @@
+[EXP-001R sequential] seed=20260901 rank=2 lr=0.003
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<06:19,  1.31s/it]Loading weights:  88%|████████▊ | 255/290 [00:01<00:00, 249.52it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 191.30it/s]
+[EXP-001R sequential] seed=20260902 rank=2 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<06:19,  1.31s/it]Loading weights:  92%|█████████▏| 267/290 [00:01<00:00, 253.67it/s]Loading weights: 100%|██████████| 290/290 [00:01<00:00, 189.72it/s]
+[EXP-001R sequential] seed=20260903 rank=2 lr=0.003
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:36,  2.98it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 707.68it/s]
+{
+  "acquisition_pass": true,
+  "acquisition_rule": ">= 0.667 mean diagonal/new-task acquisition",
+  "anti_ceiling_pass": true,
+  "anti_ceiling_rule": "sequential provides a counterexample to all-adaptive-arms >0.95 before segment 3",
+  "both_gates_pass": true,
+  "disposition": "resume_exp001_phase_b_multi_arm_development",
+  "interference_pass": true,
+  "interference_rule": ">= 0.10 average forgetting in at least one development seed",
+  "mean_diagonal_acquisition": 0.9444444444444445,
+  "numerics_and_freeze_pass": true,
+  "protocol": "EXP-001R-sequential-interference-gate-v1",
+  "representation_protocol": "EXP-001R-representation-sufficiency-v1",
+  "seed_average_forgetting": [
+    0.4444444444444445,
+    0.638888888888889,
+    0.6111111111111112
+  ],
+  "seed_mean_diagonal_acquisition": [
+    0.9444444444444445,
+    0.9722222222222222,
+    0.9166666666666666
+  ],
+  "selected_fast_rank": 2,
+  "selected_lr": 0.003,
+  "single_adapter_effective_rank": 4,
+  "status": "DEVELOPMENT_ONLY"
+}
