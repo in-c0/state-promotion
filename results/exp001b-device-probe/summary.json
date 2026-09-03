@@ -1,0 +1,33 @@
+{
+  "answer": "No. verify_device_numerics compares one forward loss and passed in all three configurations; the lifetimes still diverge.",
+  "arm": "b1_sequential",
+  "classification": "DEVELOPMENT_DEVICE_PROBE",
+  "consequence": "EXP-001B runs on CPU. The loader default changed from float16 to float32 on accelerators, and the Phase-B runner refuses a non-CPU device without an explicit override.",
+  "note": "Not a protocol run, not an arm comparison, not evidence for or against H1.",
+  "observations": [
+    {
+      "average_forgetting": 0.0,
+      "comment": "chance accuracy; adaptation silently destroyed",
+      "device": "mps",
+      "dtype": "float16",
+      "mean_diagonal": 0.16666666666666666
+    },
+    {
+      "average_forgetting": 0.33333333333333337,
+      "comment": "trains, but does not reproduce CPU",
+      "device": "mps",
+      "dtype": "float32",
+      "mean_diagonal": 0.6666666666666666
+    },
+    {
+      "average_forgetting": 0.5333333333333334,
+      "comment": "reproduces the EXP-001R sequential gate diagonal for seed 20260901 exactly",
+      "device": "cpu",
+      "dtype": "float32",
+      "mean_diagonal": 0.9444444444444445
+    }
+  ],
+  "question": "Does an accelerator reproduce the CPU adaptation trajectory for one full B1 lifetime?",
+  "seed": 20260901,
+  "wall_clock_cost": "CPU ~6m40s per arm lifetime against ~1m33s on MPS; the 4.3x speedup is not purchasable at the cost of reproducing the gates."
+}

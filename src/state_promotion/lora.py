@@ -399,6 +399,7 @@ def load_lora_model(
     device: str | None = None,
     seed: int = 1701,
     verify_numerics: bool = True,
+    compute_dtype: torch.dtype | None = None,
 ):
     """Load the same frozen LM snapshot used by EXP-001, then inject explicit LoRA."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -414,7 +415,13 @@ def load_lora_model(
         else:
             device = "cpu"
 
-    dtype = torch.float16 if device in {"cuda", "mps"} else torch.float32
+    # Accelerators previously defaulted to float16. Under EXP-001B that silently
+    # destroys adaptation: a full B1 lifetime on MPS returned chance accuracy
+    # (mean diagonal 0.167) and zero forgetting while every existing guard
+    # passed, because verify_device_numerics only compares a forward loss and
+    # never exercises an optimizer step. Training precision is float32 unless a
+    # caller explicitly opts out.
+    dtype = torch.float32 if compute_dtype is None else compute_dtype
     tokenizer = AutoTokenizer.from_pretrained(
         cfg.model_name,
         revision=cfg.model_revision,
