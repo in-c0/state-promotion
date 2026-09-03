@@ -113,6 +113,28 @@ def generate_revision_stream(seed: int, items: int = 6, train_repeats: int = 8,
     return out, codes
 
 
+def protocol_train_order(
+    segment_train: dict[int, list[Example]], seed: int
+) -> dict[int, list[Example]]:
+    """Presentation order the protocol runner uses for adaptation.
+
+    PALS emits ``train_repeats`` consecutive copies of each mapping, so raw
+    generation order is maximally blocked and drives recency collapse onto the
+    last mapping seen. ``scripts/run_lm_pals.py`` never trains that order: it
+    builds one ``random.Random(seed)`` per run and shuffles a copy of each
+    segment's train list, consuming segments in ascending order.
+
+    EXP-001R Amendment G requires every gate runner to adapt in this same order.
+    """
+    rng = random.Random(seed)
+    ordered: dict[int, list[Example]] = {}
+    for seg in sorted(segment_train):
+        items = list(segment_train[seg])
+        rng.shuffle(items)
+        ordered[seg] = items
+    return ordered
+
+
 def write_jsonl(path: Path, examples: Iterable[Example]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:

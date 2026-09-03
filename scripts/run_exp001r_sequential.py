@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from state_promotion.lm import BudgetCounter, LMExperimentConfig, completion_nll, supervised_step  # noqa: E402
 from state_promotion.lora import load_lora_model  # noqa: E402
-from state_promotion.pals import Example, generate_retention_stream  # noqa: E402
+from state_promotion.pals import Example, generate_retention_stream, protocol_train_order  # noqa: E402
 
 DEV_SEEDS = (20260901, 20260902, 20260903)
 MODEL_REVISION = "7ae557604adf67be50417f59c2c2f167def9a775"
@@ -135,6 +135,12 @@ def run_seed(*, seed: int, rank: int, lr: float, device: str, output_dir: Path) 
             raise AssertionError(f"segment {seg}: expected 48 train exposures")
         if len(segments[seg]["test"]) != 6:
             raise AssertionError(f"segment {seg}: expected 6 distinct test mappings")
+
+    # Amendment G: one RNG per run, segments consumed in ascending order, each
+    # segment's train list shuffled on a copy -- identical to run_lm_pals.py.
+    ordered = protocol_train_order({s: segments[s]["train"] for s in segments}, seed)
+    for seg in range(6):
+        segments[seg]["train"] = ordered[seg]
 
     started = time.time()
     matrix: list[list[float]] = []

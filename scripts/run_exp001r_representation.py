@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from state_promotion.lm import BudgetCounter, LMExperimentConfig, completion_nll, supervised_step  # noqa: E402
 from state_promotion.lora import load_lora_model  # noqa: E402
-from state_promotion.pals import Example, generate_retention_stream  # noqa: E402
+from state_promotion.pals import Example, generate_retention_stream, protocol_train_order  # noqa: E402
 
 
 DEV_SEEDS = (20260901, 20260902, 20260903)
@@ -134,6 +134,12 @@ def run_cell(*, seed: int, rank: int, lr: float, device: str, output_dir: Path) 
         raise AssertionError(f"EXP-001R requires 6 distinct segment-0 test mappings, got {len(tests)}")
     if any(ex.split != "train" for ex in train):
         raise AssertionError("held-out example entered adaptation set")
+
+    # Amendment G: present segment-0 train events in the protocol runner's order.
+    # PALS generation order is blocked (train_repeats consecutive copies per
+    # mapping); run_lm_pals.py shuffles a copy of each segment with one
+    # random.Random(seed) per run. Segment 0 is that RNG's first draw.
+    train = protocol_train_order({0: train}, seed)[0]
 
     params = model.set_trainable("fast")
     fast_params = sum(p.numel() for p in params)
