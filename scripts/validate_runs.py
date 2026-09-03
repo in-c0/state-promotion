@@ -70,6 +70,26 @@ def main() -> None:
                 reasons.append(f"reported_model_revision_differs_from_pin:{r.get('method')}")
             if reported_tokenizer and reported_tokenizer != pinned:
                 reasons.append(f"reported_tokenizer_revision_differs_from_pin:{r.get('method')}")
+    # Amendment F/G provenance: the tokenizer half of the pin must be positively
+    # verified by asset digests, not merely "not conflicting". Transformers 5.x
+    # leaves tokenizer_revision unset, so an absent reported revision passes the
+    # checks above while proving nothing.
+    asset_maps = []
+    for r in input_comparable:
+        prov = r.get("model", {}).get("provenance") or {}
+        digests = prov.get("tokenizer_asset_sha256") or {}
+        if not digests:
+            reasons.append(f"tokenizer_provenance_unverified:{r.get('method')}")
+        else:
+            asset_maps.append(tuple(sorted(digests.items())))
+        resolved = prov.get("resolved_snapshot_commit")
+        if resolved and snapshot_revisions and len(snapshot_revisions) == 1:
+            only = next(iter(snapshot_revisions))
+            if only and resolved != only:
+                reasons.append(f"resolved_snapshot_differs_from_pin:{r.get('method')}")
+    if asset_maps and len(set(asset_maps)) > 1:
+        reasons.append("pilot_arms_use_different_tokenizer_assets")
+
     if any(not r.get("model", {}).get("backbone_frozen", False) for r in comparable):
         reasons.append("backbone_not_frozen")
     if any(r.get("invalidation_reasons") for r in comparable):

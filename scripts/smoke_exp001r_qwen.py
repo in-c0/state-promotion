@@ -148,6 +148,10 @@ def main() -> None:
         "requested_model_revision": cfg.model_revision,
         "loaded_model_revision": getattr(model.base.config, "_commit_hash", None),
         "loaded_tokenizer_revision": getattr(tokenizer, "init_kwargs", {}).get("_commit_hash"),
+        # Amendment F/G: the pin is verified from the resolved snapshot and the
+        # SHA-256 of its tokenizer assets, not from the line above, which
+        # Transformers 5.x leaves unset.
+        "provenance": model.provenance,
         "device": args.device,
         "device_numerics": device_report,
         "git_sha": git_sha(),

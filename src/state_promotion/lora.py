@@ -402,7 +402,9 @@ def load_lora_model(
 ):
     """Load the same frozen LM snapshot used by EXP-001, then inject explicit LoRA."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
+
     from .lm import verify_device_numerics
+    from .provenance import collect_provenance
 
     if device is None:
         if torch.cuda.is_available():
@@ -448,6 +450,18 @@ def load_lora_model(
         latent_decay=cfg.latent_decay,
         seed=seed,
     ).to(device)
+
+    # Amendment F provenance is verified from the resolved snapshot directory and
+    # the SHA-256 of the tokenizer assets it contains, not from optional
+    # `_commit_hash` attributes that Transformers 5.x leaves unset. A conflicting
+    # pin raises here rather than being recorded as null.
+    model.provenance = collect_provenance(
+        model_name=cfg.model_name,
+        requested_revision=cfg.model_revision,
+        model=base,
+        tokenizer=tokenizer,
+        device=device,
+    )
     return model, tokenizer, device_report
 
 

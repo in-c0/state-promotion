@@ -24,6 +24,14 @@ def run_manifest(method: str, *, online_hash: str = "online-same", eval_hash: st
             "backbone_frozen": True,
             "plastic_parameter_capacity": 200,
             "latent_state_enabled": latent,
+            "provenance": {
+                "requested_revision": "a" * 40,
+                "resolved_snapshot_commit": "a" * 40,
+                "tokenizer_asset_sha256": {
+                    "tokenizer.json": "t" * 64,
+                    "vocab.json": "v" * 64,
+                },
+            },
         },
         "invalidation_reasons": [],
         "batch_audit": {
@@ -102,3 +110,35 @@ def test_validator_reports_missing_audit_instead_of_crashing(tmp_path):
     assert "missing_eval_query_audit:frozen" in payload["reasons"]
     assert "missing_pilot_arm_online_batch_hash" in payload["reasons"]
     assert "missing_pilot_arm_eval_query_hash" in payload["reasons"]
+
+
+def test_validator_rejects_arm_with_unverified_tokenizer_provenance(tmp_path):
+    """Transformers 5.x leaves tokenizer_revision unset, so "not conflicting" is
+    not the same as verified. An arm with no tokenizer asset digests must fail."""
+    runs = [run_manifest(m) for m in ("frozen", "sequential", "replay", "fixed", "promotion", "random")]
+    runs[2]["model"]["provenance"]["tokenizer_asset_sha256"] = {}
+    code, report = invoke(tmp_path, runs)
+    assert code != 0
+    assert any(r.startswith("tokenizer_provenance_unverified") for r in report["reasons"]), report["reasons"]
+
+
+def test_validator_rejects_arms_that_loaded_different_tokenizer_assets(tmp_path):
+    runs = [run_manifest(m) for m in ("frozen", "sequential", "replay", "fixed", "promotion", "random")]
+    runs[4]["model"]["provenance"]["tokenizer_asset_sha256"]["vocab.json"] = "w" * 64
+    code, report = invoke(tmp_path, runs)
+    assert code != 0
+    assert "pilot_arms_use_different_tokenizer_assets" in report["reasons"], report["reasons"]
+
+
+def test_validator_rejects_resolved_snapshot_that_differs_from_pin(tmp_path):
+    runs = [run_manifest(m) for m in ("frozen", "sequential", "replay", "fixed", "promotion", "random")]
+    runs[1]["model"]["provenance"]["resolved_snapshot_commit"] = "b" * 40
+    code, report = invoke(tmp_path, runs)
+    assert code != 0
+    assert any(r.startswith("resolved_snapshot_differs_from_pin") for r in report["reasons"]), report["reasons"]
+
+
+def test_validator_still_accepts_fully_provenanced_arms(tmp_path):
+    runs = [run_manifest(m) for m in ("frozen", "sequential", "replay", "fixed", "promotion", "random")]
+    code, report = invoke(tmp_path, runs)
+    assert code == 0, report["reasons"]
