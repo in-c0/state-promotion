@@ -1,0 +1,340 @@
+{
+  "b5_allowed": true,
+  "cadences": [
+    1,
+    2,
+    3
+  ],
+  "cells": [
+    {
+      "cadence_k": 1,
+      "cell": "k1@lr1e-03",
+      "commit_counts": [
+        6,
+        6,
+        6
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.18888888888888888,
+      "mean_diagonal": 0.324074074074074,
+      "mean_final_average": 0.25925925925925924,
+      "mean_retention_auc": 0.29830246913580244,
+      "per_seed_diagonal": [
+        0.27777777777777773,
+        0.3611111111111111,
+        0.3333333333333333
+      ],
+      "per_seed_forgetting": [
+        0.16666666666666666,
+        0.23333333333333334,
+        0.16666666666666666
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.001,
+      "valid": true
+    },
+    {
+      "cadence_k": 1,
+      "cell": "k1@lr2e-03",
+      "commit_counts": [
+        6,
+        6,
+        6
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.12222222222222223,
+      "mean_diagonal": 0.28703703703703703,
+      "mean_final_average": 0.25925925925925924,
+      "mean_retention_auc": 0.29398148148148145,
+      "per_seed_diagonal": [
+        0.4166666666666667,
+        0.22222222222222224,
+        0.2222222222222222
+      ],
+      "per_seed_forgetting": [
+        0.13333333333333336,
+        0.16666666666666669,
+        0.06666666666666668
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.002,
+      "valid": true
+    },
+    {
+      "cadence_k": 1,
+      "cell": "k1@lr3e-03",
+      "commit_counts": [
+        6,
+        6,
+        6
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.19999999999999998,
+      "mean_diagonal": 0.27777777777777773,
+      "mean_final_average": 0.21296296296296294,
+      "mean_retention_auc": 0.29182098765432096,
+      "per_seed_diagonal": [
+        0.3055555555555555,
+        0.2777777777777778,
+        0.25
+      ],
+      "per_seed_forgetting": [
+        0.2,
+        0.16666666666666666,
+        0.23333333333333334
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.003,
+      "valid": true
+    },
+    {
+      "cadence_k": 2,
+      "cell": "k2@lr1e-03",
+      "commit_counts": [
+        3,
+        3,
+        3
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.2555555555555556,
+      "mean_diagonal": 0.47222222222222227,
+      "mean_final_average": 0.28703703703703703,
+      "mean_retention_auc": 0.33456790123456787,
+      "per_seed_diagonal": [
+        0.4444444444444445,
+        0.5277777777777778,
+        0.4444444444444445
+      ],
+      "per_seed_forgetting": [
+        0.23333333333333334,
+        0.3666666666666667,
+        0.16666666666666669
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.001,
+      "valid": true
+    },
+    {
+      "cadence_k": 2,
+      "cell": "k2@lr2e-03",
+      "commit_counts": [
+        3,
+        3,
+        3
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.22222222222222224,
+      "mean_diagonal": 0.4444444444444445,
+      "mean_final_average": 0.2962962962962963,
+      "mean_retention_auc": 0.3470679012345679,
+      "per_seed_diagonal": [
+        0.5555555555555556,
+        0.3611111111111111,
+        0.4166666666666667
+      ],
+      "per_seed_forgetting": [
+        0.3333333333333333,
+        0.16666666666666669,
+        0.16666666666666669
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.002,
+      "valid": true
+    },
+    {
+      "cadence_k": 2,
+      "cell": "k2@lr3e-03",
+      "commit_counts": [
+        3,
+        3,
+        3
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.24444444444444446,
+      "mean_diagonal": 0.47222222222222227,
+      "mean_final_average": 0.3055555555555555,
+      "mean_retention_auc": 0.35370370370370363,
+      "per_seed_diagonal": [
+        0.5277777777777778,
+        0.4444444444444444,
+        0.4444444444444445
+      ],
+      "per_seed_forgetting": [
+        0.2666666666666667,
+        0.3,
+        0.16666666666666666
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.003,
+      "valid": true
+    },
+    {
+      "cadence_k": 3,
+      "cell": "k3@lr1e-03",
+      "commit_counts": [
+        2,
+        2,
+        2
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.2555555555555556,
+      "mean_diagonal": 0.4166666666666667,
+      "mean_final_average": 0.24074074074074073,
+      "mean_retention_auc": 0.30570987654320986,
+      "per_seed_diagonal": [
+        0.4444444444444445,
+        0.3888888888888889,
+        0.4166666666666667
+      ],
+      "per_seed_forgetting": [
+        0.2666666666666667,
+        0.2,
+        0.3
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.001,
+      "valid": true
+    },
+    {
+      "cadence_k": 3,
+      "cell": "k3@lr2e-03",
+      "commit_counts": [
+        2,
+        2,
+        2
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.2888888888888889,
+      "mean_diagonal": 0.5092592592592592,
+      "mean_final_average": 0.2685185185185185,
+      "mean_retention_auc": 0.35231481481481475,
+      "per_seed_diagonal": [
+        0.6111111111111112,
+        0.47222222222222215,
+        0.4444444444444444
+      ],
+      "per_seed_forgetting": [
+        0.3666666666666667,
+        0.2,
+        0.3
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.002,
+      "valid": true
+    },
+    {
+      "cadence_k": 3,
+      "cell": "k3@lr3e-03",
+      "commit_counts": [
+        2,
+        2,
+        2
+      ],
+      "invalidation_reasons": [],
+      "mean_average_forgetting": 0.4000000000000001,
+      "mean_diagonal": 0.5462962962962963,
+      "mean_final_average": 0.2222222222222222,
+      "mean_retention_auc": 0.3475308641975308,
+      "per_seed_diagonal": [
+        0.5555555555555556,
+        0.5277777777777778,
+        0.5555555555555556
+      ],
+      "per_seed_forgetting": [
+        0.3,
+        0.4333333333333334,
+        0.4666666666666667
+      ],
+      "seeds": [
+        20260901,
+        20260902,
+        20260903
+      ],
+      "slow_lr": 0.003,
+      "valid": true
+    }
+  ],
+  "development_seeds": [
+    20260901,
+    20260902,
+    20260903
+  ],
+  "dmax": 0.5462962962962963,
+  "elapsed_seconds": 11256.138746261597,
+  "eligibility_rule": "mean diagonal >= 0.95 * Dmax, finite, provenance valid, no resource invalidation",
+  "git_sha": "382a420a78369aa5cf5cf4b7c1468006c10867e9",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "note": "Selects a strong fixed baseline BEFORE B5 is run or inspected.",
+  "online_lr": 0.003,
+  "protocol": "EXP-001B-b3-strengthening-grid-v1",
+  "selected": {
+    "cadence_k": 3,
+    "cell": "k3@lr3e-03",
+    "commit_counts": [
+      2,
+      2,
+      2
+    ],
+    "invalidation_reasons": [],
+    "mean_average_forgetting": 0.4000000000000001,
+    "mean_diagonal": 0.5462962962962963,
+    "mean_final_average": 0.2222222222222222,
+    "mean_retention_auc": 0.3475308641975308,
+    "per_seed_diagonal": [
+      0.5555555555555556,
+      0.5277777777777778,
+      0.5555555555555556
+    ],
+    "per_seed_forgetting": [
+      0.3,
+      0.4333333333333334,
+      0.4666666666666667
+    ],
+    "seeds": [
+      20260901,
+      20260902,
+      20260903
+    ],
+    "slow_lr": 0.003,
+    "valid": true
+  },
+  "selection_rule": "lowest mean average forgetting; ties: higher retention AUC, then higher final average, then lower slow LR, then smaller cadence k",
+  "slow_lrs": [
+    0.001,
+    0.002,
+    0.003
+  ],
+  "status": "DEVELOPMENT_ONLY"
+}

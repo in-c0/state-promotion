@@ -1,0 +1,165 @@
+{
+  "accepted_commit_segments": [
+    1,
+    3,
+    5
+  ],
+  "adapter_mode": "two_timescale",
+  "arm": "b3_fixed",
+  "average_forgetting": 0.3666666666666667,
+  "backbone_frozen": true,
+  "backbone_sha256_after": "f9a7b2d36b1b313af287715f3187e0a5b979a3bd0b29367c6788d48da4f719ed",
+  "backbone_sha256_before": "f9a7b2d36b1b313af287715f3187e0a5b979a3bd0b29367c6788d48da4f719ed",
+  "budget": {
+    "decision_forward_calls": 0,
+    "decision_tokens_processed": 0,
+    "examples_seen": 288,
+    "optimizer_steps": 576,
+    "parameter_write_units": 77856768,
+    "replay_examples_used": 288,
+    "tokens_processed": 20529,
+    "training_examples_processed": 576,
+    "write_budget_exhausted_steps": 0,
+    "write_budget_units": 77856768
+  },
+  "cadence_k": 2,
+  "cell_valid": true,
+  "commit_log": [
+    {
+      "accepted": true,
+      "planned_steps": 96,
+      "segment": 1,
+      "write_units": 12976128
+    },
+    {
+      "accepted": true,
+      "planned_steps": 96,
+      "segment": 3,
+      "write_units": 12976128
+    },
+    {
+      "accepted": true,
+      "planned_steps": 96,
+      "segment": 5,
+      "write_units": 12976128
+    }
+  ],
+  "compute_dtype": "torch.float32",
+  "consolidation_batch": 1,
+  "consolidation_lr": 0.001,
+  "device": "cpu",
+  "device_numerics": {
+    "checked": false,
+    "device": "cpu",
+    "verified": null
+  },
+  "diagonal": [
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.8333333333333334,
+    0.3333333333333333
+  ],
+  "elapsed_seconds": 388.31139397621155,
+  "final_average": 0.2222222222222222,
+  "final_row": [
+    0.16666666666666666,
+    0.16666666666666666,
+    0.16666666666666666,
+    0.3333333333333333,
+    0.16666666666666666,
+    0.3333333333333333
+  ],
+  "finite_matrix": true,
+  "git_sha": "382a420a78369aa5cf5cf4b7c1468006c10867e9",
+  "invalidation_reasons": [],
+  "latent_state_enabled": true,
+  "mean_diagonal": 0.5277777777777778,
+  "online_events_T": 288,
+  "online_lr": 0.003,
+  "online_replay": false,
+  "protocol": "EXP-001B-lora-arm-v1",
+  "provenance": {
+    "code_sha": "382a420a78369aa5cf5cf4b7c1468006c10867e9",
+    "device": "cpu",
+    "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+    "platform": "macOS-15.6-arm64-arm-64bit",
+    "python_version": "3.12.14",
+    "reported_model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "reported_tokenizer_revision": null,
+    "requested_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "resolved_snapshot_commit": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "snapshot_dir": "/Users/avakim/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+    "tokenizer_asset_count": 4,
+    "tokenizer_asset_sha256": {
+      "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "tokenizer_class": "Qwen2Tokenizer",
+    "tokenizer_vocab_size": 151665,
+    "torch_version": "2.13.0",
+    "transformers_version": "5.16.1"
+  },
+  "rank": 2,
+  "retention_auc": 0.3537037037037037,
+  "retention_matrix": [
+    [
+      0.5,
+      NaN,
+      NaN,
+      NaN,
+      NaN,
+      NaN
+    ],
+    [
+      0.3333333333333333,
+      0.5,
+      NaN,
+      NaN,
+      NaN,
+      NaN
+    ],
+    [
+      0.16666666666666666,
+      0.3333333333333333,
+      0.5,
+      NaN,
+      NaN,
+      NaN
+    ],
+    [
+      0.5,
+      0.16666666666666666,
+      0.5,
+      0.5,
+      NaN,
+      NaN
+    ],
+    [
+      0.0,
+      0.0,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.8333333333333334,
+      NaN
+    ],
+    [
+      0.16666666666666666,
+      0.16666666666666666,
+      0.16666666666666666,
+      0.3333333333333333,
+      0.16666666666666666,
+      0.3333333333333333
+    ]
+  ],
+  "seed": 20260902,
+  "slow_lr": 0.001,
+  "source_tree_sha256": "ff5a557f350989fc20541944ddb2315479a5e48d8c40119b9d7b3dc9fa86d59d",
+  "status": "DEVELOPMENT_ONLY",
+  "stream": "retention",
+  "unit_write_parameters_P": 135168,
+  "write_ceiling_2TP": 77856768
+}
