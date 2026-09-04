@@ -1,0 +1,195 @@
+{
+  "affected_arms": "B3, B4 and B5 use the latent channel; B0, B1 and B2 do not.",
+  "classification": "DEVELOPMENT_DIAGNOSTIC",
+  "mechanism": "forward_encoded prepends self.latent to input embeddings while EMAing out.hidden_states[-1] into it. The two spaces are never reconciled, so the prefix drifts to last-layer activation scale beside input-scale tokens.",
+  "note": "Arm-agnostic. Not a protocol run, not an arm comparison, not evidence for or against H1.",
+  "question": "Does the persistent latent channel help or harm acquisition and consolidation?",
+  "runs": [
+    {
+      "fast_only_accuracy": 0.8333333333333334,
+      "final_latent_norm": 0.0,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 0.0,
+          "updates": 1
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 6
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 12
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 24
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 39564119,
+      "slow_only_accuracy": 0.6666666666666666,
+      "use_latent": false
+    },
+    {
+      "fast_only_accuracy": 0.5,
+      "final_latent_norm": 201.900390625,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 9.605659484863281,
+          "updates": 1
+        },
+        {
+          "latent_norm": 42.53669357299805,
+          "updates": 6
+        },
+        {
+          "latent_norm": 91.72281646728516,
+          "updates": 12
+        },
+        {
+          "latent_norm": 145.5297393798828,
+          "updates": 24
+        },
+        {
+          "latent_norm": 201.900390625,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 448.09124041581293,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 39564119,
+      "slow_only_accuracy": 0.16666666666666666,
+      "use_latent": true
+    },
+    {
+      "fast_only_accuracy": 1.0,
+      "final_latent_norm": 0.0,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 0.0,
+          "updates": 1
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 6
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 12
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 24
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 59714453,
+      "slow_only_accuracy": 0.8333333333333334,
+      "use_latent": false
+    },
+    {
+      "fast_only_accuracy": 0.16666666666666666,
+      "final_latent_norm": 197.31687927246094,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 9.876996994018555,
+          "updates": 1
+        },
+        {
+          "latent_norm": 38.51011657714844,
+          "updates": 6
+        },
+        {
+          "latent_norm": 83.55043029785156,
+          "updates": 12
+        },
+        {
+          "latent_norm": 146.58306884765625,
+          "updates": 24
+        },
+        {
+          "latent_norm": 197.31687927246094,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 437.9187425763517,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 59714453,
+      "slow_only_accuracy": 0.3333333333333333,
+      "use_latent": true
+    },
+    {
+      "fast_only_accuracy": 0.8333333333333334,
+      "final_latent_norm": 0.0,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 0.0,
+          "updates": 1
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 6
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 12
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 24
+        },
+        {
+          "latent_norm": 0.0,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 14200664,
+      "slow_only_accuracy": 0.6666666666666666,
+      "use_latent": false
+    },
+    {
+      "fast_only_accuracy": 0.16666666666666666,
+      "final_latent_norm": 200.59974670410156,
+      "latent_growth_trace": [
+        {
+          "latent_norm": 9.765124320983887,
+          "updates": 1
+        },
+        {
+          "latent_norm": 44.55265426635742,
+          "updates": 6
+        },
+        {
+          "latent_norm": 90.38346099853516,
+          "updates": 12
+        },
+        {
+          "latent_norm": 154.1178436279297,
+          "updates": 24
+        },
+        {
+          "latent_norm": 200.59974670410156,
+          "updates": 48
+        }
+      ],
+      "latent_norm_ratio": 445.20463308409586,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 14200664,
+      "slow_only_accuracy": 0.16666666666666666,
+      "use_latent": true
+    }
+  ]
+}
