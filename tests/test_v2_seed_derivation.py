@@ -8,12 +8,17 @@ from __future__ import annotations
 import hashlib
 
 import pytest
+
 from state_promotion.seeds import (
+    RETIRED_DEVELOPMENT_SEEDS,
     V1_DEVELOPMENT_SEEDS,
     V2_DEVELOPMENT_LABEL,
     V2_DEVELOPMENT_SEEDS,
+    V3_DEVELOPMENT_LABEL,
+    V3_DEVELOPMENT_SEEDS,
     derive_seeds,
     v2_development_seeds,
+    v3_development_seeds,
 )
 
 # Exactly as written in issue #6.
@@ -63,3 +68,46 @@ def test_derivation_is_pure():
 def test_requesting_more_seeds_than_the_digest_supports_raises():
     with pytest.raises(ValueError):
         derive_seeds(V2_DEVELOPMENT_LABEL, 9)
+
+
+# --- v3 (issue #7) ---
+
+ISSUE_7_SEEDS = (15007679, 42082468, 63400529, 74102599, 48546640)
+
+
+def test_v3_derivation_reproduces_the_issue_7_list_exactly():
+    assert v3_development_seeds() == ISSUE_7_SEEDS
+
+
+def test_v3_label_is_the_one_issue_7_names():
+    assert V3_DEVELOPMENT_LABEL == "EXP-001-v3-embedding-latent-development-v1"
+
+
+def test_v3_derivation_is_recomputable_from_first_principles():
+    digest = hashlib.sha256(V3_DEVELOPMENT_LABEL.encode()).digest()
+    expected = tuple(
+        (int.from_bytes(digest[i * 4:(i + 1) * 4], "big") % 90_000_000) + 10_000_000
+        for i in range(5)
+    )
+    assert expected == ISSUE_7_SEEDS
+
+
+def test_v3_uses_the_same_rule_already_committed_for_v2():
+    assert v3_development_seeds() == derive_seeds(V3_DEVELOPMENT_LABEL, 5)
+
+
+def test_v3_seeds_are_disjoint_from_all_retired_development_seeds():
+    """v1 saw arm ordering; three v2 seeds saw the latent diagnostic. Neither set
+    may be reused for tuning."""
+    assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(V1_DEVELOPMENT_SEEDS))
+    assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(V2_DEVELOPMENT_SEEDS))
+    assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(RETIRED_DEVELOPMENT_SEEDS))
+
+
+def test_retired_set_covers_v1_and_v2():
+    assert set(RETIRED_DEVELOPMENT_SEEDS) == set(V1_DEVELOPMENT_SEEDS) | set(V2_DEVELOPMENT_SEEDS)
+
+
+def test_v3_seeds_are_distinct_and_uniform_width():
+    assert len(set(V3_DEVELOPMENT_SEEDS)) == 5
+    assert all(10_000_000 <= s <= 99_999_999 for s in V3_DEVELOPMENT_SEEDS)

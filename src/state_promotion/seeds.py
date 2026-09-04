@@ -16,6 +16,11 @@ import hashlib
 V2_DEVELOPMENT_LABEL = "EXP-001-v2-consolidation-development-v1"
 V2_DEVELOPMENT_SEED_COUNT = 5
 
+# v3 (issue #7): the v2 seeds are retired too -- latent diagnostics were
+# inspected on three of them, so they are no longer clean for tuning.
+V3_DEVELOPMENT_LABEL = "EXP-001-v3-embedding-latent-development-v1"
+V3_DEVELOPMENT_SEED_COUNT = 5
+
 SEED_SPAN = 90_000_000
 SEED_FLOOR = 10_000_000
 
@@ -37,4 +42,12 @@ def v2_development_seeds() -> tuple[int, ...]:
     return derive_seeds(V2_DEVELOPMENT_LABEL, V2_DEVELOPMENT_SEED_COUNT)
 
 
+def v3_development_seeds() -> tuple[int, ...]:
+    return derive_seeds(V3_DEVELOPMENT_LABEL, V3_DEVELOPMENT_SEED_COUNT)
+
+
 V2_DEVELOPMENT_SEEDS = v2_development_seeds()
+V3_DEVELOPMENT_SEEDS = v3_development_seeds()
+
+# Every seed already burned on inspected performance or diagnostics.
+RETIRED_DEVELOPMENT_SEEDS = V1_DEVELOPMENT_SEEDS + V2_DEVELOPMENT_SEEDS

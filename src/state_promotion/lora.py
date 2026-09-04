@@ -339,6 +339,23 @@ class LoRAStateLM(nn.Module):
         labels = labels.to(self.device) if labels is not None else None
 
         token_emb = self.base.get_input_embeddings()(input_ids)
+
+        # EXP-001 v3 latent repair (issue #7 section 0). The persistent state is a
+        # vector in the *frozen input-embedding space*, observed from token_emb
+        # before prefix concatenation. The v1/v2 port EMAed out.hidden_states[-1]
+        # into this same buffer and injected the result as an input embedding,
+        # mixing two spaces with nothing between them; the latent reached ~445x the
+        # median token-embedding norm. Observation is computed here, but applied
+        # after the forward, so the prefix seen while predicting example t is
+        # z_{t-1} and an example never summarises its own target into its own
+        # prefix.
+        latent_observation = None
+        if update_latent:
+            with torch.no_grad():
+                mask = attention_mask.to(token_emb.dtype).unsqueeze(-1)
+                obs = (token_emb * mask).sum(dim=1) / mask.sum(dim=1).clamp_min(1.0)
+                latent_observation = obs.mean(dim=0, keepdim=True).to(self.latent.dtype)
+
         latent = self.latent if use_latent else self.latent_anchor
         prefix = latent.to(device=self.device, dtype=token_emb.dtype).unsqueeze(0).expand(
             token_emb.shape[0], -1, -1
@@ -364,16 +381,17 @@ class LoRAStateLM(nn.Module):
             inputs_embeds=inputs_embeds,
             attention_mask=full_mask,
             labels=full_labels,
-            output_hidden_states=update_latent,
             use_cache=False,
         )
-        if update_latent:
+        if latent_observation is not None:
             with torch.no_grad():
-                h = out.hidden_states[-1][:, 1:, :]
-                mask = attention_mask.to(h.dtype).unsqueeze(-1)
-                obs = (h * mask).sum(dim=1) / mask.sum(dim=1).clamp_min(1.0)
-                obs = obs.mean(dim=0, keepdim=True).to(self.latent.dtype)
-                self.latent.mul_(self.latent_decay).add_(obs * (1.0 - self.latent_decay))
+                # z_t = decay * z_{t-1} + (1 - decay) * obs_t, decay unchanged at 0.95.
+                # From zero init this is a convex exponentially weighted sum of
+                # embedding-space observations, so ||z_t|| <= max_i ||obs_i||
+                # by construction rather than by any chosen threshold.
+                self.latent.mul_(self.latent_decay).add_(
+                    latent_observation * (1.0 - self.latent_decay)
+                )
         return out
 
     def snapshot_plastic_state(self) -> dict[str, torch.Tensor]:
