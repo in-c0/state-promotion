@@ -1,0 +1,46 @@
+{
+  "criterion": {
+    "mean_min": 0.8333333333333334,
+    "per_seed_min": 0.6666666666666666,
+    "source": "EXP-001R sufficiency criterion, unchanged"
+  },
+  "development_seeds": [
+    15007679,
+    42082468,
+    63400529,
+    74102599,
+    48546640
+  ],
+  "elapsed_seconds": 146.24709606170654,
+  "git_sha": "f5d83e1f5bf9a079cbb9f1021dbf7dad93d679cf",
+  "invalidation_reasons": [],
+  "l1_allowed": false,
+  "latent_norm_after_fast": [
+    0.1066775992512703,
+    0.10695421695709229,
+    0.10866344720125198,
+    0.10623092949390411,
+    0.1077413335442543
+  ],
+  "latent_norm_ratio": [
+    0.2367568365029393,
+    0.23737075295222923,
+    0.24116416364297066,
+    0.23576551199378473,
+    0.23911765421775666
+  ],
+  "mean_accuracy": 0.7,
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "note": "No routing, no consolidation, no arm comparison.",
+  "passes": false,
+  "per_seed_accuracy": [
+    0.5,
+    1.0,
+    0.8333333333333334,
+    0.8333333333333334,
+    0.3333333333333333
+  ],
+  "protocol": "EXP-001v3-L0-latent-enabled-acquisition-v1",
+  "status": "DEVELOPMENT_ONLY",
+  "worst_seed_accuracy": 0.3333333333333333
+}

@@ -192,14 +192,15 @@ def run_cell(*, seed: int, batch: int, slow_lr: float, device: str) -> dict:
     }
 
 
-def _score(model, tokenizer, tests, candidates, *, use_fast: bool, use_slow: bool):
+def _score(model, tokenizer, tests, candidates, *, use_fast: bool, use_slow: bool,
+           use_latent: bool = False):
     from state_promotion.lm import completion_nll
 
     rows, correct = [], 0
     for ex in tests:
         scores = {
             c: completion_nll(model, tokenizer, ex, c,
-                              use_fast=use_fast, use_slow=use_slow, use_latent=False)
+                              use_fast=use_fast, use_slow=use_slow, use_latent=use_latent)
             for c in candidates
         }
         pred = min(scores, key=scores.get)

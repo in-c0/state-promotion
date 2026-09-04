@@ -1,0 +1,122 @@
+{
+  "answer": "Only partly. With the latent disabled the same configuration still fails the EXP-001R criterion on these fresh seeds (mean 0.800 < 5/6). The latent degrades acquisition further (0.800 -> 0.700) but is not the whole cause.",
+  "classification": "DEVELOPMENT_DIAGNOSTIC",
+  "criterion": {
+    "mean_min": 0.8333333333333334,
+    "per_seed_min": 0.6666666666666666,
+    "source": "EXP-001R sufficiency criterion, unchanged"
+  },
+  "exp001r_recorded_result_for_this_cell_on_v1_seeds": {
+    "cell": "r=2 @ lr 3e-3",
+    "mean": 1.0,
+    "note": "the cell the predeclared EXP-001R rule selected, scored on v1 seeds",
+    "per_seed": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "seeds": [
+      20260901,
+      20260902,
+      20260903
+    ]
+  },
+  "latent_off": {
+    "mean": 0.8,
+    "meets_exp001r_criterion": false,
+    "per_seed": [
+      0.6666666666666666,
+      1.0,
+      0.8333333333333334,
+      0.8333333333333334,
+      0.6666666666666666
+    ],
+    "worst": 0.6666666666666666
+  },
+  "latent_on": {
+    "mean": 0.7,
+    "meets_exp001r_criterion": false,
+    "per_seed": [
+      0.5,
+      1.0,
+      0.8333333333333334,
+      0.8333333333333334,
+      0.3333333333333333
+    ],
+    "worst": 0.3333333333333333
+  },
+  "note": "Arm-agnostic. Not a protocol run, not an arm comparison, not evidence for or against H1.",
+  "question": "Is L0's failure attributable to the repaired latent channel?",
+  "runs": [
+    {
+      "accuracy": 0.6666666666666666,
+      "latent_norm": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 15007679,
+      "use_latent": false
+    },
+    {
+      "accuracy": 0.5,
+      "latent_norm": 0.1066775992512703,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 15007679,
+      "use_latent": true
+    },
+    {
+      "accuracy": 1.0,
+      "latent_norm": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 42082468,
+      "use_latent": false
+    },
+    {
+      "accuracy": 1.0,
+      "latent_norm": 0.10695421695709229,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 42082468,
+      "use_latent": true
+    },
+    {
+      "accuracy": 0.8333333333333334,
+      "latent_norm": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 63400529,
+      "use_latent": false
+    },
+    {
+      "accuracy": 0.8333333333333334,
+      "latent_norm": 0.10866344720125198,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 63400529,
+      "use_latent": true
+    },
+    {
+      "accuracy": 0.8333333333333334,
+      "latent_norm": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 74102599,
+      "use_latent": false
+    },
+    {
+      "accuracy": 0.8333333333333334,
+      "latent_norm": 0.10623092949390411,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 74102599,
+      "use_latent": true
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "latent_norm": 0.0,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 48546640,
+      "use_latent": false
+    },
+    {
+      "accuracy": 0.3333333333333333,
+      "latent_norm": 0.1077413335442543,
+      "median_token_embedding_norm": 0.4505787491798401,
+      "seed": 48546640,
+      "use_latent": true
+    }
+  ]
+}
