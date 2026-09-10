@@ -1,0 +1,293 @@
+[A] r=1 lr=0.0003 seed=45019859
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3239.32it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5169.22it/s]
+    acc=0.333 26s
+[A] r=1 lr=0.0003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:40,  7.10it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1223.56it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4558.04it/s]
+    acc=0.500 26s
+[A] r=1 lr=0.0003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:25,  3.37it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 848.34it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4343.73it/s]
+    acc=0.000 26s
+[A] r=1 lr=0.0003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.87it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 989.24it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4413.20it/s]
+    acc=0.167 27s
+[A] r=1 lr=0.0003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.80it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 908.08it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3566.59it/s]
+    acc=0.333 26s
+[A] r=1 lr=0.0003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:41,  7.05it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1477.90it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3438.52it/s]
+    acc=0.333 27s
+[A] r=1 lr=0.0003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 903.38it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3594.09it/s]
+    acc=0.000 23s
+[A] r=1 lr=0.0003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.65it/s]Loading weights:  97%|█████████▋| 281/290 [00:00<00:00, 960.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 773.11it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4205.24it/s]
+    acc=0.333 28s
+[A] r=1 lr=0.001 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.33it/s]Loading weights:  89%|████████▊ | 257/290 [00:00<00:00, 820.98it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 620.79it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5214.20it/s]
+    acc=0.500 25s
+[A] r=1 lr=0.001 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:28,  3.28it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 814.46it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3457.79it/s]
+    acc=0.333 27s
+[A] r=1 lr=0.001 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.41it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 848.11it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4065.04it/s]
+    acc=0.167 27s
+[A] r=1 lr=0.001 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.65it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1006.57it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4848.91it/s]
+    acc=0.333 26s
+[A] r=1 lr=0.001 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.51it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 905.06it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 729.86it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4299.20it/s]
+    acc=0.500 27s
+[A] r=1 lr=0.001 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.52it/s]Loading weights:  97%|█████████▋| 280/290 [00:00<00:00, 896.43it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 728.75it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3594.71it/s]
+    acc=0.667 28s
+[A] r=1 lr=0.001 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:34,  3.07it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 705.75it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 576.86it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4722.25it/s]
+    acc=0.500 29s
+[A] r=1 lr=0.001 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:47,  2.69it/s]Loading weights:  89%|████████▊ | 257/290 [00:00<00:00, 702.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 508.97it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 2983.57it/s]
+    acc=0.333 29s
+[A] r=1 lr=0.003 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:44,  2.75it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 750.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 554.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4487.81it/s]
+    acc=0.500 29s
+[A] r=1 lr=0.003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:29,  3.24it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 792.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 562.38it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3630.80it/s]
+    acc=0.667 28s
+[A] r=1 lr=0.003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 893.87it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4316.90it/s]
+    acc=0.667 28s
+[A] r=1 lr=0.003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.44it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 865.23it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 677.28it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4022.93it/s]
+    acc=0.500 28s
+[A] r=1 lr=0.003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 728.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 2525.47it/s]
+    acc=0.667 29s
+[A] r=1 lr=0.003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 984.02it/s]Loading weights:  80%|███████▉  | 231/290 [00:00<00:00, 1079.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 901.90it/s] 
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4162.67it/s]
+    acc=0.833 30s
+[A] r=1 lr=0.003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 945.83it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4295.68it/s]
+    acc=0.167 26s
+[A] r=1 lr=0.003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.49it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 868.71it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3213.04it/s]
+    acc=0.667 28s
+[A] r=2 lr=0.0003 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:43,  6.68it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1328.47it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4369.98it/s]
+    acc=0.500 28s
+[A] r=2 lr=0.0003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 1719.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2049.02it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4159.37it/s]
+    acc=0.500 29s
+[A] r=2 lr=0.0003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:37,  2.96it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 744.21it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3767.79it/s]
+    acc=0.167 30s
+[A] r=2 lr=0.0003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.81it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1028.58it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4255.58it/s]
+    acc=0.667 29s
+[A] r=2 lr=0.0003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 1711.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1676.01it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4591.97it/s]
+    acc=0.333 27s
+[A] r=2 lr=0.0003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  38%|███▊      | 111/290 [00:00<00:00, 1107.17it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1575.94it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4970.73it/s]
+    acc=0.667 28s
+[A] r=2 lr=0.0003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:00,  4.80it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1208.34it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4259.04it/s]
+    acc=0.167 25s
+[A] r=2 lr=0.0003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:02,  4.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1061.25it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4186.77it/s]
+    acc=0.333 28s
+[A] r=2 lr=0.001 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 908.81it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4416.92it/s]
+    acc=0.667 26s
+[A] r=2 lr=0.001 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:08,  4.23it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 958.35it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5166.67it/s]
+    acc=1.000 26s
+[A] r=2 lr=0.001 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.17it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1244.20it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3951.67it/s]
+    acc=0.000 28s
+[A] r=2 lr=0.001 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.41it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 842.53it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4333.85it/s]
+    acc=0.333 27s
+[A] r=2 lr=0.001 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 804.76it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3706.53it/s]
+    acc=0.500 29s
+[A] r=2 lr=0.001 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.47it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 900.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 711.13it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3698.03it/s]
+    acc=0.500 28s
+[A] r=2 lr=0.001 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 854.65it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3857.19it/s]
+    acc=0.167 25s
+[A] r=2 lr=0.001 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:21,  3.54it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 910.19it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 736.21it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3398.95it/s]
+    acc=0.667 29s
+[A] r=2 lr=0.003 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.66it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 936.72it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3962.12it/s]
+    acc=0.333 25s
+[A] r=2 lr=0.003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 916.48it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4497.43it/s]
+    acc=0.667 29s
+[A] r=2 lr=0.003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.48it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 874.58it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3457.79it/s]
+    acc=0.333 29s
+[A] r=2 lr=0.003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:21,  3.54it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 926.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4136.39it/s]
+    acc=0.500 30s
+[A] r=2 lr=0.003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.48it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 880.65it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 2876.75it/s]
+    acc=0.667 30s
+[A] r=2 lr=0.003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.64it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 860.28it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 653.74it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3402.81it/s]
+    acc=0.833 30s
+[A] r=2 lr=0.003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.58it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 880.18it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4013.69it/s]
+    acc=0.333 27s
+[A] r=2 lr=0.003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.71it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 861.57it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3885.05it/s]
+    acc=0.500 29s
+[A] r=4 lr=0.0003 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.71it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 903.54it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3866.43it/s]
+    acc=0.500 27s
+[A] r=4 lr=0.0003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.43it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 809.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3595.32it/s]
+    acc=0.333 28s
+[A] r=4 lr=0.0003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:25,  3.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 774.01it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4429.04it/s]
+    acc=0.167 28s
+[A] r=4 lr=0.0003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 123/290 [00:00<00:00, 1144.78it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 1136.28it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1115.29it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4995.60it/s]
+    acc=0.500 29s
+[A] r=4 lr=0.0003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.70it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 917.33it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4340.13it/s]
+    acc=0.167 26s
+[A] r=4 lr=0.0003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 1853.14it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2068.81it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5447.15it/s]
+    acc=0.333 26s
+[A] r=4 lr=0.0003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 1816.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2147.29it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5708.09it/s]
+    acc=0.167 25s
+[A] r=4 lr=0.0003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 1585.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1918.20it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5218.09it/s]
+    acc=0.500 27s
+[A] r=4 lr=0.001 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  51%|█████     | 147/290 [00:00<00:00, 1441.68it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1836.23it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4278.16it/s]
+    acc=0.500 23s
+[A] r=4 lr=0.001 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 169/290 [00:00<00:00, 1655.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1934.86it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5269.23it/s]
+    acc=0.833 28s
+[A] r=4 lr=0.001 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  41%|████      | 119/290 [00:00<00:00, 1177.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1694.15it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4994.41it/s]
+    acc=0.500 27s
+[A] r=4 lr=0.001 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 181/290 [00:00<00:00, 1784.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2061.56it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5118.75it/s]
+    acc=0.500 26s
+[A] r=4 lr=0.001 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:31,  9.05it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1606.31it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5203.85it/s]
+    acc=0.333 28s
+[A] r=4 lr=0.001 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 1757.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1643.41it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5138.82it/s]
+    acc=0.833 26s
+[A] r=4 lr=0.001 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:37,  7.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1423.66it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5518.82it/s]
+    acc=0.167 27s
+[A] r=4 lr=0.001 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:37,  2.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 770.89it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4774.94it/s]
+    acc=0.667 27s
+[A] r=4 lr=0.003 seed=45019859
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 954.83it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5160.31it/s]
+    acc=0.333 25s
+[A] r=4 lr=0.003 seed=44948853
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 910.63it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4194.30it/s]
+    acc=1.000 28s
+[A] r=4 lr=0.003 seed=26370277
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.68it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 964.23it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5669.51it/s]
+    acc=0.333 27s
+[A] r=4 lr=0.003 seed=98113429
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 100/290 [00:00<00:00, 974.43it/s]Loading weights:  71%|███████▏  | 207/290 [00:00<00:00, 1022.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1141.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4803.37it/s]
+    acc=0.333 29s
+[A] r=4 lr=0.003 seed=69325507
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.42it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 885.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 710.57it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3861.45it/s]
+    acc=1.000 30s
+[A] r=4 lr=0.003 seed=13342392
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.34it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 802.78it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 4964.85it/s]
+    acc=1.000 30s
+[A] r=4 lr=0.003 seed=45787057
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 829.38it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 5291.83it/s]
+    acc=0.167 29s
+[A] r=4 lr=0.003 seed=54985860
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 742.67it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00, 3271.69it/s]
+    acc=0.500 30s
+{
+  "panel_b_allowed": false,
+  "selected": null
+}

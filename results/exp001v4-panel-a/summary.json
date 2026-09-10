@@ -1,0 +1,218 @@
+{
+  "cells": [
+    {
+      "cell": "r1@lr3e-04",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.25,
+      "online_lr": 0.0003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.3333333333333333,
+        0.5,
+        0.0,
+        0.16666666666666666,
+        0.3333333333333333,
+        0.3333333333333333,
+        0.0,
+        0.3333333333333333
+      ],
+      "rank": 1,
+      "valid": true,
+      "worst_seed_accuracy": 0.0
+    },
+    {
+      "cell": "r1@lr1e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.41666666666666663,
+      "online_lr": 0.001,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.5,
+        0.3333333333333333,
+        0.16666666666666666,
+        0.3333333333333333,
+        0.5,
+        0.6666666666666666,
+        0.5,
+        0.3333333333333333
+      ],
+      "rank": 1,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "cell": "r1@lr3e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.5833333333333334,
+      "online_lr": 0.003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.5,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.5,
+        0.6666666666666666,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.6666666666666666
+      ],
+      "rank": 1,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "cell": "r2@lr3e-04",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.41666666666666663,
+      "online_lr": 0.0003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.5,
+        0.5,
+        0.16666666666666666,
+        0.6666666666666666,
+        0.3333333333333333,
+        0.6666666666666666,
+        0.16666666666666666,
+        0.3333333333333333
+      ],
+      "rank": 2,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "cell": "r2@lr1e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.47916666666666663,
+      "online_lr": 0.001,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.6666666666666666,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.5,
+        0.5,
+        0.16666666666666666,
+        0.6666666666666666
+      ],
+      "rank": 2,
+      "valid": true,
+      "worst_seed_accuracy": 0.0
+    },
+    {
+      "cell": "r2@lr3e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.5208333333333334,
+      "online_lr": 0.003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.3333333333333333,
+        0.6666666666666666,
+        0.3333333333333333,
+        0.5,
+        0.6666666666666666,
+        0.8333333333333334,
+        0.3333333333333333,
+        0.5
+      ],
+      "rank": 2,
+      "valid": true,
+      "worst_seed_accuracy": 0.3333333333333333
+    },
+    {
+      "cell": "r4@lr3e-04",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.3333333333333333,
+      "online_lr": 0.0003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.5,
+        0.3333333333333333,
+        0.16666666666666666,
+        0.5,
+        0.16666666666666666,
+        0.3333333333333333,
+        0.16666666666666666,
+        0.5
+      ],
+      "rank": 4,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "cell": "r4@lr1e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.5416666666666666,
+      "online_lr": 0.001,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.5,
+        0.8333333333333334,
+        0.5,
+        0.5,
+        0.3333333333333333,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.6666666666666666
+      ],
+      "rank": 4,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    },
+    {
+      "cell": "r4@lr3e-03",
+      "invalidation_reasons": [],
+      "mean_accuracy": 0.5833333333333334,
+      "online_lr": 0.003,
+      "passes": false,
+      "per_seed_accuracy": [
+        0.3333333333333333,
+        1.0,
+        0.3333333333333333,
+        0.3333333333333333,
+        1.0,
+        1.0,
+        0.16666666666666666,
+        0.5
+      ],
+      "rank": 4,
+      "valid": true,
+      "worst_seed_accuracy": 0.16666666666666666
+    }
+  ],
+  "criterion": {
+    "mean_min": 0.8333333333333334,
+    "per_seed_min": 0.6666666666666666,
+    "source": "EXP-001R acquisition criterion, unchanged"
+  },
+  "elapsed_seconds": 1982.8491208553314,
+  "git_sha": "34d5e55ef3b4bc4416b2da6458951942de456fc2",
+  "learning_rates": [
+    0.0003,
+    0.001,
+    0.003
+  ],
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "note": "Selection panel. Not evidence of robustness on its own -- Panel B decides that.",
+  "panel_b_allowed": false,
+  "protocol": "EXP-001v4-panel-a-representation-selection-v1",
+  "ranks": [
+    1,
+    2,
+    4
+  ],
+  "selected": null,
+  "selection_rule": "smallest rank; within rank highest worst-seed; then highest mean; exact ties prefer lower LR",
+  "selection_seeds": [
+    45019859,
+    44948853,
+    26370277,
+    98113429,
+    69325507,
+    13342392,
+    45787057,
+    54985860
+  ],
+  "status": "DEVELOPMENT_ONLY"
+}
