@@ -96,16 +96,24 @@ def test_v3_uses_the_same_rule_already_committed_for_v2():
     assert v3_development_seeds() == derive_seeds(V3_DEVELOPMENT_LABEL, 5)
 
 
-def test_v3_seeds_are_disjoint_from_all_retired_development_seeds():
+def test_v3_seeds_were_disjoint_from_the_seeds_retired_before_them():
     """v1 saw arm ordering; three v2 seeds saw the latent diagnostic. Neither set
-    may be reused for tuning."""
+    could be reused when v3 was drawn.
+
+    v3's own seeds have since been burned by the L0 stop and are themselves in
+    RETIRED_DEVELOPMENT_SEEDS, so the live question is only about the panels
+    drawn before them."""
     assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(V1_DEVELOPMENT_SEEDS))
     assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(V2_DEVELOPMENT_SEEDS))
-    assert set(V3_DEVELOPMENT_SEEDS).isdisjoint(set(RETIRED_DEVELOPMENT_SEEDS))
 
 
-def test_retired_set_covers_v1_and_v2():
-    assert set(RETIRED_DEVELOPMENT_SEEDS) == set(V1_DEVELOPMENT_SEEDS) | set(V2_DEVELOPMENT_SEEDS)
+def test_retired_set_covers_every_burned_panel_including_v3():
+    """v3 joined the retired set at the L0 stop: gate L0 and its latent-off
+    control were both scored on those five seeds."""
+    assert set(RETIRED_DEVELOPMENT_SEEDS) == (
+        set(V1_DEVELOPMENT_SEEDS) | set(V2_DEVELOPMENT_SEEDS) | set(V3_DEVELOPMENT_SEEDS)
+    )
+    assert set(V3_DEVELOPMENT_SEEDS) <= set(RETIRED_DEVELOPMENT_SEEDS)
 
 
 def test_v3_seeds_are_distinct_and_uniform_width():

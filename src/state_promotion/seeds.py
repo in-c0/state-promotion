@@ -21,6 +21,17 @@ V2_DEVELOPMENT_SEED_COUNT = 5
 V3_DEVELOPMENT_LABEL = "EXP-001-v3-embedding-latent-development-v1"
 V3_DEVELOPMENT_SEED_COUNT = 5
 
+# v4 (issue #8): three mutually disjoint panels. The three-seed EXP-001R
+# representation gate did not reproduce on fresh seeds, so selection now runs on
+# one panel and is validated on a second it never touched. Panel C is reserved
+# for downstream work and may not be used to revisit rank/LR.
+V4_SELECTION_LABEL = "EXP-001-v4-representation-selection-v1"
+V4_SELECTION_SEED_COUNT = 8
+V4_VALIDATION_LABEL = "EXP-001-v4-representation-validation-v1"
+V4_VALIDATION_SEED_COUNT = 8
+V4_DOWNSTREAM_LABEL = "EXP-001-v4-downstream-development-v1"
+V4_DOWNSTREAM_SEED_COUNT = 5
+
 SEED_SPAN = 90_000_000
 SEED_FLOOR = 10_000_000
 
@@ -46,8 +57,25 @@ def v3_development_seeds() -> tuple[int, ...]:
     return derive_seeds(V3_DEVELOPMENT_LABEL, V3_DEVELOPMENT_SEED_COUNT)
 
 
+def v4_selection_seeds() -> tuple[int, ...]:
+    return derive_seeds(V4_SELECTION_LABEL, V4_SELECTION_SEED_COUNT)
+
+
+def v4_validation_seeds() -> tuple[int, ...]:
+    return derive_seeds(V4_VALIDATION_LABEL, V4_VALIDATION_SEED_COUNT)
+
+
+def v4_downstream_seeds() -> tuple[int, ...]:
+    return derive_seeds(V4_DOWNSTREAM_LABEL, V4_DOWNSTREAM_SEED_COUNT)
+
+
 V2_DEVELOPMENT_SEEDS = v2_development_seeds()
 V3_DEVELOPMENT_SEEDS = v3_development_seeds()
+V4_SELECTION_SEEDS = v4_selection_seeds()
+V4_VALIDATION_SEEDS = v4_validation_seeds()
+V4_DOWNSTREAM_SEEDS = v4_downstream_seeds()
 
 # Every seed already burned on inspected performance or diagnostics.
-RETIRED_DEVELOPMENT_SEEDS = V1_DEVELOPMENT_SEEDS + V2_DEVELOPMENT_SEEDS
+RETIRED_DEVELOPMENT_SEEDS = (
+    V1_DEVELOPMENT_SEEDS + V2_DEVELOPMENT_SEEDS + V3_DEVELOPMENT_SEEDS
+)
