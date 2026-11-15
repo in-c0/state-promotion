@@ -1,4 +1,0 @@
-*.jsonl
-*.txt
-!.gitignore
-!README.md
