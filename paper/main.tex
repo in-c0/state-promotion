@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref}
+\title{State Promotion: Evidence-Gated Multi-Timescale Adaptation for Continual Language Models}
+\author{Anonymous draft}
+\date{Working paper -- no results yet}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Language models deployed as persistent agents face a stability--plasticity problem: new experience should influence future behavior without indiscriminately overwriting previously reliable capabilities. We study a state hierarchy that separates ephemeral computation, persistent latent state, rapidly plastic adapter parameters, and slowly consolidated parameters around a frozen foundation model. The central mechanism is evidence-gated state promotion: fast adaptation is treated as a candidate rather than durable knowledge, and consolidation is committed only after retention tests under explicit write and compute budgets. We preregister comparisons against sequential adaptation, replay, and fixed-schedule consolidation. This manuscript intentionally contains no empirical claim until the preregistered experiments are complete.
+\end{abstract}
+
+\section{Introduction}
+Continual learning remains difficult because the same mechanism that enables rapid adaptation can interfere with previously acquired behavior. Recent work attacks different parts of this problem using neural test-time memory, multiple optimization timescales, structured external memory, frozen-backbone capacity expansion, explicit state commitment, and continual adaptation of agent harnesses. Our question is narrower: when an experience could influence several persistence mechanisms, can an explicit promotion boundary improve the stability--plasticity frontier under matched budgets?
+
+\section{Related Work}
+We position this work relative to Titans~\cite{behrouz2025titans}, Nested Learning/Hope~\cite{behrouz2025nested}, continual multi-timescale memory~\cite{pattichis2026memini}, State Commitment Learning~\cite{ding2026statecommit}, SCALE~\cite{lee2026scale}, and Harness Continual Learning~\cite{kang2026hcl}. The project also treats the preregistered negative findings of Memoir as a methodological warning: write timing must not be confounded with write volume, and ceiling tasks cannot adjudicate architecture claims~\cite{memoir2026}.
+
+\section{Method}
+Let $\theta_0$ denote frozen foundation parameters, $z_t$ a persistent bounded latent state, $F_t$ fast plastic parameters, $S_t$ slow parameters, and $E_t$ a bounded episodic replay store. The agent computes
+\[
+y_t = f(x_t; \theta_0, z_t, F_t, S_t, E_t).
+\]
+Fast updates produce a candidate $F'_t$. A promotion function $g$ evaluates evidence, acquisition, and retention constraints before a candidate is consolidated into $S_{t+1}$. Rejected candidates remain recoverable through episodic evidence rather than silently becoming durable parameters.
+
+\section{Experiments}
+Primary hypotheses, baselines, budget matching, invalidation criteria, and required ablations are preregistered in \texttt{experiments/EXP-001-PREREG.md}. We first use a controlled procedurally generated stream to avoid contamination and ceiling effects, then evaluate on established continual-instruction benchmarks.
+
+\section{Results}
+\textbf{Intentionally blank before confirmatory runs.}
+
+\section{Limitations}
+The initial study tests small language models and bounded sequential streams. It does not establish lifelong learning, consciousness, stable identity, or general-purpose autonomous-agent safety. Scaling to approximately 7B parameters is a replication stage rather than a substitute for controlled small-model ablation.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
